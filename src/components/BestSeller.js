@@ -15,7 +15,7 @@ export default function BestSeller() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch("/api/products/?sort=BestSeller&limit=3");
+            const response = await fetch("/api/products/?bestseller=true&limit=3");
             const data = await response.json();
             if (!data.success) {
                 console.error("Failed to fetch bestsellers:", data.error);

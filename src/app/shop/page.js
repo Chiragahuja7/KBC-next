@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { allproducts, categories } from "@/data/products";
+import { allproducts } from "@/data/products";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -22,6 +22,14 @@ export default function Shop() {
     const [pageState, setPageState] = useState(1);
     const [pagesState, setPagesState] = useState(1);
     const [totalState, setTotalState] = useState(0);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        fetch("/api/categories")
+            .then(res => res.json())
+            .then(data => setCategories((data.categories || []).map(c => c.name)))
+            .catch(() => { });
+    }, []);
 
     useEffect(() => {
         if (!searchParams) return;

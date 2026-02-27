@@ -14,7 +14,7 @@ export default function MostPopular() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch("/api/products/?sort=MostPopular&limit=3");
+            const response = await fetch("/api/products/?mostPopular=true&limit=3");
             const data = await response.json();
             if (!data.success) {
                 console.error("Failed to fetch most popular products:", data.error);

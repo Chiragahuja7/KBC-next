@@ -52,6 +52,12 @@ export async function GET(req) {
   if (inStock === "true") query["sizes.0"] = { $exists: true };
   if (inStock === "false") query["sizes.0"] = { $exists: false };
 
+  const bestseller = searchParams.get("bestseller");
+  if (bestseller === "true") query.isBestSeller = true;
+
+  const mostPopular = searchParams.get("mostPopular");
+  if (mostPopular === "true") query.isMostPopular = true;
+
   const min = searchParams.get("minPrice");
   const max = searchParams.get("maxPrice");
 
