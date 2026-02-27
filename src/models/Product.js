@@ -12,13 +12,25 @@ const ProductSchema = new mongoose.Schema(
     oldPrice: Number,
     isBestSeller: { type: Boolean, default: false },
     isMostPopular: { type: Boolean, default: false },
+    isListed: { type: Boolean, default: true },
     images: [
       {
         url: String,
         public_id: String,
       },
     ],
-    sizes: [String],
+    sizes: [
+      {
+        label: String,
+        price: Number,
+        oldPrice: Number,
+        image: {
+          url: String,
+          public_id: String,
+        },
+      },
+    ],
+    colors: [String],
     category: [String],
   },
   { timestamps: true }

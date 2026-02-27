@@ -1,13 +1,14 @@
 import cloudinary from "@/src/lib/cloudinary";
 import { NextResponse } from "next/server";
+import sharp from "sharp";
 
 export async function POST(req) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("files");
+    let files = formData.getAll("files");
     if (!files || files.length === 0) {
       const single = formData.get("file");
-      if (single) files.push(single);
+      if (single) files = [single];
     }
 
     if (!files || files.length === 0) {
@@ -18,13 +19,22 @@ export async function POST(req) {
       files.map(async (file) => {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
+
+        // Convert to WebP for optimization
+        const webpBuffer = await sharp(buffer)
+          .webp({ quality: 80 })
+          .toBuffer();
+
         const result = await new Promise((resolve, reject) => {
           cloudinary.uploader
-            .upload_stream({ folder: "nextjs_uploads" }, (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
-            })
-            .end(buffer);
+            .upload_stream(
+              { folder: "nextjs_uploads", format: "webp" },
+              (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+              }
+            )
+            .end(webpBuffer);
         });
         return { url: result.secure_url, public_id: result.public_id };
       })

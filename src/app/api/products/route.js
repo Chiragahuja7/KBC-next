@@ -38,6 +38,12 @@ export async function GET(req) {
 
   const query = {};
 
+  // Hide unlisted products from storefront; admin sees all
+  const admin = searchParams.get("admin");
+  if (admin !== "true") {
+    query.isListed = { $ne: false };
+  }
+
   const category = searchParams.get("category");
   if (category) {
     query.category = new RegExp(category, "i");
@@ -160,6 +166,13 @@ export async function DELETE(req) {
     if (Array.isArray(product.images)) {
       product.images.forEach((img) => {
         if (img?.public_id) publicIds.push(img.public_id);
+      });
+    }
+
+    // Also collect size variant images
+    if (Array.isArray(product.sizes)) {
+      product.sizes.forEach((sz) => {
+        if (sz?.image?.public_id) publicIds.push(sz.image.public_id);
       });
     }
 

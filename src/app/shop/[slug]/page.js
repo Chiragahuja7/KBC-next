@@ -16,7 +16,8 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,7 +38,11 @@ export default function Page() {
         setProduct(data.product);
 
         if (data.product.sizes?.length > 0) {
-          setSelectedSize(data.product.sizes[0]);
+          const firstSize = data.product.sizes[0];
+          setSelectedSize(typeof firstSize === 'string' ? firstSize : firstSize);
+        }
+        if (data.product.colors?.length > 0) {
+          setSelectedColor(data.product.colors[0]);
         }
 
         const firstImg = data.product?.images && data.product.images[0] ? data.product.images[0].url : null;
@@ -185,11 +190,11 @@ export default function Page() {
             <h1 className="text-3xl">{product.name}</h1>
             <div className="flex">
               <p className="text-green-700 text-2xl mt-3">
-                Rs. {product.price}.00
+                Rs. {selectedSize && typeof selectedSize === 'object' && selectedSize.price ? selectedSize.price : product.price}.00
               </p>
-              {product.oldPrice != null && (
+              {(selectedSize && typeof selectedSize === 'object' && selectedSize.oldPrice ? selectedSize.oldPrice : product.oldPrice) != null && (
                 <p className="ms-3 text-xl line-through text-gray-400 mt-3.5">
-                  Rs. {product.oldPrice}.00
+                  Rs. {selectedSize && typeof selectedSize === 'object' && selectedSize.oldPrice ? selectedSize.oldPrice : product.oldPrice}.00
                 </p>
               )}
             </div>
@@ -198,21 +203,51 @@ export default function Page() {
               <div className="mt-4">
                 <span className="block mb-2 font-medium">Size:</span>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size, index) => (
-                    <label key={index} className="ms-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="size"
-                        className="hidden"
-                        checked={selectedSize === size}
-                        onChange={() => setSelectedSize(size)}
-                      />
+                  {product.sizes.map((size, index) => {
+                    const isObject = typeof size === 'object';
+                    const label = isObject ? size.label : size;
+                    const isSelected = isObject ? selectedSize?.label === label : selectedSize === label;
+                    return (
+                      <label key={index} className="ms-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="size"
+                          className="hidden"
+                          checked={isSelected}
+                          onChange={() => {
+                            setSelectedSize(size);
+                            if (isObject && size.image?.url) {
+                              setDisplayImage(size.image.url);
+                            } else if (product.images?.[0]?.url) {
+                              setDisplayImage(product.images[0].url);
+                              setCurrentIndex(0);
+                            }
+                          }}
+                        />
+                        <span className={`block text-center min-w-12 px-4 py-2 border rounded-lg text-sm sm:text-base transition-colors duration-200
+                          ${isSelected ? "bg-black text-white border-black" : "bg-white text-black border-gray-300 hover:border-black"}`}>
+                          {label}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-                      <span className={`block text-center min-w-12 px-4 py-2 border rounded-lg text-sm sm:text-base transition-colors duration-200
-                  ${selectedSize === size ? "bg-black text-white border-black" : "bg-white text-black border-gray-300 hover:border-black"}`}>
-                        {size}
-                      </span>
-                    </label>
+            {Array.isArray(product.colors) && product.colors.length > 0 && (
+              <div className="mt-4">
+                <span className="block mb-2 font-medium">Color: <span className="font-normal text-gray-600">{selectedColor}</span></span>
+                <div className="flex flex-wrap gap-2">
+                  {product.colors.map((color, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-4 py-2 border rounded-lg text-sm transition-colors duration-200
+                        ${selectedColor === color ? "bg-black text-white border-black" : "bg-white text-black border-gray-300 hover:border-black"}`}
+                    >
+                      {color}
+                    </button>
                   ))}
                 </div>
               </div>
@@ -226,14 +261,16 @@ export default function Page() {
               </div>
 
               <button className="bg-gray-800 text-white w-full sm:w-auto md:px-44 px-5 py-3 rounded-full" onClick={() => {
-                addToCart(product, selectedSize, quantity);
+                const sizeLabel = typeof selectedSize === 'object' ? selectedSize?.label : selectedSize;
+                addToCart(product, sizeLabel, quantity, selectedColor);
                 setIsCartOpen(true);
               }}
               >Add to Cart</button>
             </div>
             <button className="bg-green-900 mt-2 text-white w-full px-10 py-4 rounded-full"
               onClick={() => {
-                directBuy(product, selectedSize, quantity);
+                const sizeLabel = typeof selectedSize === 'object' ? selectedSize?.label : selectedSize;
+                directBuy(product, sizeLabel, quantity, selectedColor);
                 setShowCheckout(true);
               }}
             >Buy It Now</button>
@@ -243,7 +280,7 @@ export default function Page() {
                 <svg width="25" height="25" fill="none">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 14.501h1c1.1 0 2-.9 2-2v-10H6c-1.5 0-2.81.83-3.49 2.05"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2 17.501c0 1.66 1.34 3 3 3h1c0-1.1.9-2 2-2s2 .9 2 2h4c0-1.1.9-2 2-2s2 .9 2 2h1c1.66 0 3-1.34 3-3v-3h-3c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1.29l-1.71-2.99a2.016 2.016 0 0 0-1.74-1.01H15v7c0 1.1-.9 2-2 2h-1"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 22.501a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM16 22.501a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM22 12.501v2h-3c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1.29l1.71 3ZM2 8.501h6M2 11.501h4M2 14.501h2"></path>
                 </svg>
-                <p>Estimate delivery times: <strong className="font-bold">3-5 days</strong> all across India</p>
+                <p>Estimate delivery times: <strong className="font-bold">7-15 days</strong> all across India</p>
               </div>
               <div className="flex gap-2 ms-3 mt-5 font-extralight border-b border-gray-300 pb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="none">
@@ -252,7 +289,7 @@ export default function Page() {
                   <path d="M12.0788 12.0856H12.0862" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                   <path d="M7.91209 7.91862H7.91957" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
-                <p>Use code "<strong className="font-bold">EXTRA10</strong>" to get extra 10% OFF on your order.</p>
+                <p>Extra <strong className="font-bold">10%  off</strong> on shopping above 1500.</p>
               </div>
               <div className="flex gap-2 ms-3 mt-5 font-extralight md:pb-0 pb-3">
                 <svg viewBox="0 0 32 32" width="25" fill="none">
@@ -260,7 +297,7 @@ export default function Page() {
                   <path d="M2.962 8.3 14 14.687l10.962-6.35M14 26.013V14.675" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                   <path d="M11.412 2.1 4.737 5.813c-1.512.837-2.75 2.937-2.75 4.662v7.063c0 1.724 1.238 3.825 2.75 4.662l6.675 3.713c1.425.787 3.763.787 5.188 0l6.675-3.713c1.512-.837 2.75-2.938 2.75-4.662v-7.063c0-1.725-1.238-3.825-2.75-4.662L16.6 2.1c-1.438-.8-3.763-.8-5.188 0Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
-                <p>Free shipping on all orders</p>
+                <p>Free shipping on all orders above 500</p>
               </div>
             </div>
 
@@ -276,45 +313,6 @@ export default function Page() {
                 <details className="group border border-gray-300 bg-white p-3 border-x-white border-b-white">
                   <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
                     <span>Description</span>
-                    <span className="group-open:hidden text-2xl">+</span>
-                    <span className="hidden group-open:block text-2xl">-</span>
-                  </summary>
-
-                  <div className="group-open:animate-fadeIn mt-3 text-gray-600">
-                    <p className="whitespace-pre-line">{product.description}</p>
-                  </div>
-                </details>
-              </div>
-              <div>
-                <details className="group border border-gray-300 bg-white p-3 border-x-white border-b-white">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                    <span>Ingredients</span>
-                    <span className="group-open:hidden text-2xl">+</span>
-                    <span className="hidden group-open:block text-2xl">-</span>
-                  </summary>
-
-                  <div className="group-open:animate-fadeIn mt-3 text-gray-600">
-                    <p className="whitespace-pre-line">{product.description}</p>
-                  </div>
-                </details>
-              </div>
-              <div>
-                <details className="group border border-gray-300 bg-white p-3 border-x-white border-b-white">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                    <span>Direction of use</span>
-                    <span className="group-open:hidden text-2xl">+</span>
-                    <span className="hidden group-open:block text-2xl">-</span>
-                  </summary>
-
-                  <div className="group-open:animate-fadeIn mt-3 text-gray-600">
-                    <p className="whitespace-pre-line">{product.description}</p>
-                  </div>
-                </details>
-              </div>
-              <div>
-                <details className="group border border-gray-300 bg-white p-3 border-x-white">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                    <span>Additional Info.</span>
                     <span className="group-open:hidden text-2xl">+</span>
                     <span className="hidden group-open:block text-2xl">-</span>
                   </summary>
