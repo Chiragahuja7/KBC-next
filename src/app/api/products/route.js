@@ -12,14 +12,6 @@ export async function POST(req) {
 
     if (body.price !== undefined) body.price = Number(body.price);
     if (body.oldPrice !== undefined) body.oldPrice = Number(body.oldPrice);
-      if (Array.isArray(body.sizes)) {
-        body.sizes = body.sizes.map((sz) => ({
-          size: sz.size,
-          price: sz.price !== undefined && sz.price !== null ? Number(sz.price) : undefined,
-          oldPrice: sz.oldPrice !== undefined && sz.oldPrice !== null ? Number(sz.oldPrice) : undefined,
-          image: sz.image || null,
-        }));
-      }
 
     const product = await Product.create(body);
 
@@ -64,9 +56,9 @@ export async function GET(req) {
   const max = searchParams.get("maxPrice");
 
   if (min || max) {
-    query["sizes.price"] = {};
-    if (min) query["sizes.price"].$gte = Number(min);
-    if (max) query["sizes.price"].$lte = Number(max);
+    query["price"] = {};
+    if (min) query["price"].$gte = Number(min);
+    if (max) query["price"].$lte = Number(max);
   }
 
   const sortParam = searchParams.get("sort");
@@ -74,22 +66,22 @@ export async function GET(req) {
   if (sortParam) {
     switch (sortParam) {
       case "priceLowHigh":
-        sortObj={ "sizes.price": 1 };
+        sortObj = { "price": 1 };
         break;
       case "priceHighLow":
-        sortObj={ "sizes.price": -1 };
+        sortObj = { "price": -1 };
         break;
       case "AlphabeticalAZ":
-        sortObj={ name: 1 };
+        sortObj = { name: 1 };
         break;
       case "AlphabeticalZA":
-        sortObj={ name: -1 };
+        sortObj = { name: -1 };
         break;
       case "BestSeller":
-        sortObj={ createdAt: -1 };
+        sortObj = { createdAt: -1 };
         break;
       default:
-        sortObj={ createdAt: -1 };
+        sortObj = { createdAt: -1 };
     }
   }
 
@@ -121,14 +113,6 @@ export async function PUT(req) {
     let product;
     if (update.price !== undefined) update.price = Number(update.price);
     if (update.oldPrice !== undefined) update.oldPrice = Number(update.oldPrice);
-    if (Array.isArray(update.sizes)) {
-      update.sizes = update.sizes.map((sz) => ({
-        size: sz.size,
-        price: sz.price !== undefined && sz.price !== null ? Number(sz.price) : undefined,
-        oldPrice: sz.oldPrice !== undefined && sz.oldPrice !== null ? Number(sz.oldPrice) : undefined,
-        image: sz.image || null,
-      }));
-    }
 
     if (id) {
       product = await Product.findByIdAndUpdate(id, update, { new: true });
@@ -170,14 +154,6 @@ export async function DELETE(req) {
     if (Array.isArray(product.images)) {
       product.images.forEach((img) => {
         if (img?.public_id) publicIds.push(img.public_id);
-      });
-    }
-
-    if (Array.isArray(product.sizes)) {
-      product.sizes.forEach((sz) => {
-        if (sz?.image?.public_id) {
-          publicIds.push(sz.image.public_id);
-        }
       });
     }
 

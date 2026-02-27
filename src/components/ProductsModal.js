@@ -31,7 +31,7 @@ export default function ProductModal({ product, onClose }) {
   useEffect(() => {
     if (!product) return;
     if (Array.isArray(product.sizes) && product.sizes.length > 0) {
-      setVariant((v) => v || product.sizes[0].size);
+      setVariant((v) => v || product.sizes[0]);
     }
   }, [product]);
 
@@ -41,26 +41,12 @@ export default function ProductModal({ product, onClose }) {
     return item.url || item.secure_url || null;
   }
 
-  const isSizeBased = Array.isArray(product?.sizes) && product.sizes.length > 0;
-  const selectedSize = isSizeBased ? product.sizes.find((s) => s.size === variant) || product.sizes[0] : null;
+  const hasSizes = Array.isArray(product?.sizes) && product.sizes.length > 0;
 
-  const globalImages = Array.isArray(product?.images)
-    ? (product.images || []).map(imgUrl).filter(Boolean)
+  // Gallery always uses global product images
+  const gallery = Array.isArray(product?.images)
+    ? product.images.map(imgUrl).filter(Boolean)
     : [];
-
-  let sizeImages = [];
-  if (product && !Array.isArray(product.images) && product.images && product.images[variant]) {
-    sizeImages = (product.images[variant] || []).map(imgUrl).filter(Boolean);
-  } else if (selectedSize && selectedSize.image && imgUrl(selectedSize.image)) {
-    sizeImages = [imgUrl(selectedSize.image)];
-  }
-
-  const commonImage = (globalImages.length > 1 ? globalImages[1] : globalImages[0]) || null;
-  const remainingGlobals = globalImages.filter((img) => img && img !== commonImage);
-  const gallery = [];
-  if (sizeImages.length > 0) gallery.push(sizeImages[0]);
-  if (commonImage) gallery.push(commonImage, commonImage);
-  gallery.push(...remainingGlobals);
 
   function increaseQty() {
     setQty((prev) => prev + 1);
@@ -103,7 +89,7 @@ export default function ProductModal({ product, onClose }) {
           >
             {gallery.map((img, i) => (
               <SwiperSlide key={i}>
-                <Image src={img} width={500} height={500} alt="product" className="w-full h-80 md:h-125 rounded-2xl object-cover"/>
+                <Image src={img} width={500} height={500} alt="product" className="w-full h-80 md:h-125 rounded-2xl object-cover" />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -118,26 +104,27 @@ export default function ProductModal({ product, onClose }) {
 
           <div className="mt-4">
             <span className="text-green-700 text-3xl font-bold">
-              Rs. {selectedSize?.price ?? product?.price}.00
+              Rs. {product?.price}.00
             </span>
-            {(selectedSize?.oldPrice ?? product?.oldPrice) != null && (
-              <span className="line-through text-gray-600 text-2xl ml-2">Rs. {selectedSize?.oldPrice ?? product?.oldPrice}.00</span>
+            {product?.oldPrice != null && (
+              <span className="line-through text-gray-600 text-2xl ml-2">Rs. {product?.oldPrice}.00</span>
             )}
           </div>
 
-          <p className="text-gray-700 mt-4">Weight: <b>{selectedSize?.size ?? variant}</b></p>
-
-          {isSizeBased && (
-            <div className="flex gap-2 mt-6">
-              {product.sizes.map((s) => (
-                <button
-                  key={s.size}
-                  onClick={() => setVariant(s.size)}
-                  className={`border px-5 py-2.5 border-gray-300  text-sm text-black ${variant === s.size ? "bg-black text-white" : ""}`}>
-                  {s.size}
-                </button>
-              ))}
-            </div>
+          {hasSizes && (
+            <>
+              <p className="text-gray-700 mt-4">Weight: <b>{variant}</b></p>
+              <div className="flex gap-2 mt-6">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setVariant(s)}
+                    className={`border px-5 py-2.5 border-gray-300  text-sm text-black ${variant === s ? "bg-black text-white" : ""}`}>
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
 
           <div className="flex items-center gap-4 mt-5">
@@ -148,18 +135,18 @@ export default function ProductModal({ product, onClose }) {
               <button onClick={increaseQty}>+</button>
             </div>
 
-            <button onClick={() => { addToCart(product, selectedSize, qty); setIsCartOpen(true); }} className="bg-gray-800 text-white w-full py-4 rounded-full">
+            <button onClick={() => { addToCart(product, variant, qty); setIsCartOpen(true); }} className="bg-gray-800 text-white w-full py-4 rounded-full">
               Add to Cart
             </button>
           </div>
 
-          <button onClick={() => { directBuy(product, selectedSize, qty); setShowCheckout(true); }} className="bg-green-900 text-white w-full py-4 rounded-full mt-4">
+          <button onClick={() => { directBuy(product, variant, qty); setShowCheckout(true); }} className="bg-green-900 text-white w-full py-4 rounded-full mt-4">
             Buy it now
           </button>
           <div className="md:pt-15">
-          <Link href={`/shop/${product.slug}`} className="p-3 text-sm font-bold cursor-pointer text-black">
-            View Full Details »
-          </Link>
+            <Link href={`/shop/${product.slug}`} className="p-3 text-sm font-bold cursor-pointer text-black">
+              View Full Details »
+            </Link>
           </div>
         </div>
       </div>

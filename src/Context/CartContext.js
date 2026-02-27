@@ -3,12 +3,12 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
-export const useCart =()=>{
-    const context = useContext(CartContext);
-    if(!context){
-        throw new Error("useCart must be used within a CartProvider");
-    }
-    return context;
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
 }
 
 export const CartProvider = ({ children }) => {
@@ -37,19 +37,19 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevItems.find(
         (item) =>
           item._id === product._id &&
-          item.selectedSize?.size === selectedSize?.size
+          item.selectedSize === selectedSize
       );
 
       if (existingItem) {
         return prevItems.map((item) =>
           item._id === product._id &&
-          item.selectedSize?.size === selectedSize?.size
+            item.selectedSize === selectedSize
             ? { ...item, quantity: (item.quantity ?? 0) + qty }
             : item
         );
       }
 
-      return [ ...prevItems, { ...product, selectedSize, quantity: qty } ];
+      return [...prevItems, { ...product, selectedSize, quantity: qty }];
     });
   };
 
@@ -57,7 +57,7 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) =>
       prevItems.filter(
         (item) =>
-          !(item._id === productId && item.selectedSize?.size === size)
+          !(item._id === productId && item.selectedSize === size)
       )
     );
   };
@@ -66,7 +66,7 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item._id === productId &&
-        item.selectedSize?.size === size
+          item.selectedSize === size
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
@@ -77,17 +77,17 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item._id === productId &&
-        item.selectedSize?.size === size
+          item.selectedSize === size
           ? {
-              ...item,
-              quantity: Math.max(1, item.quantity - 1),
-            }
+            ...item,
+            quantity: Math.max(1, item.quantity - 1),
+          }
           : item
       )
     );
   };
 
-  const directBuy =(product,selectedSize,quantity)=>{
+  const directBuy = (product, selectedSize, quantity) => {
     const qty = quantity ?? 1;
     setCartItems([{ ...product, selectedSize, quantity: qty }]);
   }

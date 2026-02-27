@@ -22,7 +22,7 @@ export default function CheckoutModal({ onClose }) {
   const [pincode, setPincode] = useState("");
 
   const total = cartItems.reduce(
-    (acc, item) => acc + item.selectedSize.price * item.quantity,
+    (acc, item) => acc + (item.price ?? 0) * item.quantity,
     0
   );
 
@@ -96,9 +96,10 @@ export default function CheckoutModal({ onClose }) {
     const items = cartItems.map(item => ({
       productId: item._id,
       name: item.name,
-      price: item.selectedSize?.price || 0,
+      price: item.price ?? 0,
       qty: item.quantity,
-      image: item.selectedSize?.image?.url || (item.images && item.images[0]?.url) || "",
+      size: item.selectedSize || "",
+      image: (item.images && item.images[0]?.url) || "",
     }));
 
     const formData = new FormData();
@@ -134,15 +135,15 @@ export default function CheckoutModal({ onClose }) {
             {cartItems.map((item, i) => (
               <li key={i} className="flex justify-between py-1 border-b-gray-200 border-b">
                 <img
-                  src={item.selectedSize?.image?.url || item.images?.[0]?.url}
+                  src={item.images?.[0]?.url}
                   alt={item.name}
                   className="w-15 h-12 object-cover rounded"
                 />
                 <div>
                   <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-500">Size: {item.selectedSize?.size} × {item.quantity}</p>
+                  <p className="text-sm text-gray-500">{item.selectedSize ? `Size: ${item.selectedSize} × ` : ''}{item.quantity}</p>
                 </div>
-                <div className="font-bold">Rs.{item.selectedSize?.price * item.quantity}</div>
+                <div className="font-bold">Rs.{(item.price ?? 0) * item.quantity}</div>
               </li>
             ))}
           </ul>
@@ -167,24 +168,20 @@ export default function CheckoutModal({ onClose }) {
             }
           }}
         >
-            <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your name" required />
-                 <label className="block text-sm font-medium mb-1 mt-2">Email</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your email" required />
-                 <label className="block text-sm font-medium mb-1 mt-2">Phone No</label>
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your phone" required />
-                 <label className="block text-sm font-medium mb-1 mt-2">Address</label>
-                <input value={address} onChange={(e) => setAddress(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your address" required />
-                 <label className="block text-sm font-medium mb-1 mt-2">Pincode</label>
-                <input value={pincode} onChange={(e) => setPincode(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your pincode" required />
-            </div>
-            <button type="submit" disabled={loading || cartItems.length === 0} className="bg-[#444444] text-white w-full px-4 py-3 rounded-full">{loading ? 'Processing...' : 'Submit'}</button>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your name" required />
+            <label className="block text-sm font-medium mb-1 mt-2">Email</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your email" required />
+            <label className="block text-sm font-medium mb-1 mt-2">Phone No</label>
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your phone" required />
+            <label className="block text-sm font-medium mb-1 mt-2">Address</label>
+            <input value={address} onChange={(e) => setAddress(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your address" required />
+            <label className="block text-sm font-medium mb-1 mt-2">Pincode</label>
+            <input value={pincode} onChange={(e) => setPincode(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your pincode" required />
+          </div>
+          <button type="submit" disabled={loading || cartItems.length === 0} className="bg-[#444444] text-white w-full px-4 py-3 rounded-full">{loading ? 'Processing...' : 'Submit'}</button>
         </form>
-
-        {/* <button  disabled={loading || cartItems.length === 0} className="bg-[#444444] mt-3 text-white w-full px-4 py-3 rounded-full">
-          {loading ? "Processing..." : `Pay Rs.${total}`}
-        </button> */}
       </div>
     </div>
   );

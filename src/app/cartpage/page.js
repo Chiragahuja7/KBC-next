@@ -3,20 +3,20 @@
 import Link from "next/link";
 import { useCart } from "../../Context/CartContext";
 
-export default function CartPage(){
+export default function CartPage() {
     const { cartItems, increaseQty, decreaseQty, removeFromCart } = useCart();
 
     const items = cartItems || [];
 
-    function changeQty(item, delta){
-        if (delta > 0) increaseQty(item._id, item.selectedSize?.size);
-        else decreaseQty(item._id, item.selectedSize?.size);
+    function changeQty(item, delta) {
+        if (delta > 0) increaseQty(item._id, item.selectedSize);
+        else decreaseQty(item._id, item.selectedSize);
     }
 
-  const total = cartItems.reduce(
-    (acc, item) => acc + item.selectedSize.price * item.quantity,
-    0
-  );
+    const total = cartItems.reduce(
+        (acc, item) => acc + (item.price ?? 0) * item.quantity,
+        0
+    );
 
     return (
         <>
@@ -46,41 +46,41 @@ export default function CartPage(){
                     <div>
                         {items.map(item => {
                             const id = item._id || item.id;
-                            const price = item.selectedSize?.price ?? item.price ?? (item.sizes && item.sizes[0]?.price) ?? 0;
+                            const price = item.price ?? 0;
                             const qty = item.quantity ?? item.qty ?? 1;
-                            const img = item.selectedSize?.image?.url ?? item.images?.[0]?.url ?? item.img ?? '/assets/placeholder.png';
+                            const img = item.images?.[0]?.url ?? item.img ?? '/assets/placeholder.png';
                             return (
-                            <div key={id + (item.selectedSize?.size || '')} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start md:items-center py-6 border-b border-b-gray-300">
-                                <div className="md:col-span-6 flex items-start md:items-center gap-4">
-                                    <img src={img} alt={item.name} className="w-24 h-24 object-cover rounded" />
-                                    <div>
-                                        <h3 className="font-semibold">{item.name}</h3>
-                                        {item.selectedSize?.size && <p className="text-sm text-gray-500 mt-1">{item.selectedSize.size}</p>}
-                                        {item.pack && <p className="text-sm text-gray-500 mt-1">{item.pack}</p>}
-                                        <div className="flex items-center gap-3 mt-2 text-gray-400">
-                                            {/* <button className="text-sm">Edit</button> */}
-                                            <button onClick={() => removeFromCart(id, item.selectedSize?.size)} className="text-sm text-red-600">Remove</button>
+                                <div key={id + (item.selectedSize || '')} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start md:items-center py-6 border-b border-b-gray-300">
+                                    <div className="md:col-span-6 flex items-start md:items-center gap-4">
+                                        <img src={img} alt={item.name} className="w-24 h-24 object-cover rounded" />
+                                        <div>
+                                            <h3 className="font-semibold">{item.name}</h3>
+                                            {item.selectedSize && <p className="text-sm text-gray-500 mt-1">{item.selectedSize}</p>}
+                                            {item.pack && <p className="text-sm text-gray-500 mt-1">{item.pack}</p>}
+                                            <div className="flex items-center gap-3 mt-2 text-gray-400">
+                                                <button onClick={() => removeFromCart(id, item.selectedSize)} className="text-sm text-red-600">Remove</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="md:col-span-2">
-                                    <p className="text-green-800 font-bold">Rs. {Number(price).toLocaleString()}</p>
-                                </div>
+                                    <div className="md:col-span-2">
+                                        <p className="text-green-800 font-bold">Rs. {Number(price).toLocaleString()}</p>
+                                    </div>
 
-                                <div className="md:col-span-2">
-                                    <div className="inline-flex items-center bg-gray-100 rounded-full px-3 py-2">
-                                        <button onClick={() => changeQty(item, -1)} className="px-3 text-lg">−</button>
-                                        <div className="px-4 font-semibold">{qty}</div>
-                                        <button onClick={() => changeQty(item, 1)} className="px-3 text-lg">+</button>
+                                    <div className="md:col-span-2">
+                                        <div className="inline-flex items-center bg-gray-100 rounded-full px-3 py-2">
+                                            <button onClick={() => changeQty(item, -1)} className="px-3 text-lg">−</button>
+                                            <div className="px-4 font-semibold">{qty}</div>
+                                            <button onClick={() => changeQty(item, 1)} className="px-3 text-lg">+</button>
+                                        </div>
+                                    </div>
+
+                                    <div className="md:col-span-2 text-right">
+                                        <p className="font-semibold">Rs. {(price * qty).toLocaleString()}</p>
                                     </div>
                                 </div>
-
-                                <div className="md:col-span-2 text-right">
-                                    <p className="font-semibold">Rs. {(price * qty).toLocaleString()}</p>
-                                </div>
-                            </div>
-                        )})}
+                            )
+                        })}
                     </div>
 
                     <div className="mt-8 md:block hidden">
@@ -112,20 +112,20 @@ export default function CartPage(){
                         <div className="mb-4">
                             <div className="bg-gray-100 p-6">
                                 <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                                <div className="bg-green-900 h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
+                                    <div className="bg-green-900 h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
                                 </div>
 
                                 {total >= 500 ? (
-                                <div className="mt-2">
-                                    <p className="text-green-900 font-bold">🎉 You qualify for free shipping!</p>
-                                </div>
-                                ):(
-                                <div className="flex mt-2">
-                                <p>Spend Rs 500 to get </p><p className="text-green-900 ms-1">Free shipping!</p>
-                                </div>
+                                    <div className="mt-2">
+                                        <p className="text-green-900 font-bold">🎉 You qualify for free shipping!</p>
+                                    </div>
+                                ) : (
+                                    <div className="flex mt-2">
+                                        <p>Spend Rs 500 to get </p><p className="text-green-900 ms-1">Free shipping!</p>
+                                    </div>
                                 )
                                 }
-                                
+
                             </div>
                             <p className="mt-4 text-gray-700">Congratulations! You've got free shipping!</p>
                         </div>

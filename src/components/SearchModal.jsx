@@ -57,9 +57,8 @@ export default function SearchModal({ isOpen, onClose, searchQuery }) {
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`absolute top-16 left-0 w-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-          show ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`absolute top-16 left-0 w-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${show ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <div className="p-4">
 
@@ -102,7 +101,7 @@ export default function SearchModal({ isOpen, onClose, searchQuery }) {
                       </div>
                       <div className="mt-2 text-sm font-medium">{p.name}</div>
                       <div className="text-sm text-green-700">
-                        ₹{p.sizes?.[0]?.price || ""}
+                        ₹{p.price || ""}
                       </div>
                     </Link>
                   ))}
