@@ -24,5 +24,8 @@ const ProductSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Product ||
-  mongoose.model("Product", ProductSchema);
+const Product = mongoose.models.Product
+  ? (delete mongoose.models.Product, mongoose.model("Product", ProductSchema))
+  : mongoose.model("Product", ProductSchema);
+
+export default Product;
