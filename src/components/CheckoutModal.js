@@ -38,7 +38,7 @@ export default function CheckoutModal({ onClose }) {
       cartItems.forEach((item, index) => {
         const size = typeof item.selectedSize === "object" ? item.selectedSize.label : (item.selectedSize || "N/A");
         const color = item.selectedColor || "";
-        const itemLink = `https://kunjbiharicollection.in/shop/${item.slug}`;
+        const itemLink = `https://kunjbiharicollections.in/shop/${item.slug}`;
         
         message += `${index + 1}. ${item.name}`;
         if (size && size !== "N/A") message += ` (${size})`;

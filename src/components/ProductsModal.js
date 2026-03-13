@@ -109,46 +109,64 @@ export default function ProductModal({ product, onClose }) {
     >
 
       <div
-        className="bg-white w-full max-w-5xl rounded-3xl grid grid-cols-1 md:grid-cols-2 relative mx-4 md:mx-0 overflow-hidden"
+        className="bg-white w-full max-w-5xl rounded-3xl grid grid-cols-1 md:grid-cols-2 relative mx-4 md:mx-0 overflow-y-auto md:overflow-hidden max-h-[90vh] md:max-h-none"
         onMouseDown={(e) => e.stopPropagation()}
       >
 
-        <button onClick={onClose} className="absolute right-4 top-4 text-xl text-black">✕</button>
-        <div>
+        {/* Improved Close Button for Mobile and Desktop */}
+        <button 
+          onClick={onClose} 
+          className="absolute right-4 top-4 z-10 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full shadow-md text-xl text-black md:bg-transparent md:shadow-none hover:bg-gray-100 transition"
+        >
+          ✕
+        </button>
 
+        <div className="w-full aspect-square md:aspect-auto">
           <Swiper
             pagination={{ clickable: true }}
             modules={[Pagination]}
-            className="rounded-2xl w-full h-80 md:h-auto"
+            className="w-full h-full"
           >
             {gallery.map((img, i) => (
               <SwiperSlide key={i}>
-                <Image src={img} width={500} height={500} alt="product" className="w-full h-80 md:h-125 rounded-2xl object-cover" />
+                <div className="relative w-full h-80 md:h-[600px] flex items-center justify-center bg-gray-50">
+                  <Image 
+                    src={img} 
+                    fill 
+                    alt="product" 
+                    className="object-contain md:object-cover" 
+                    priority={i === 0}
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
-        <div className="p-4 md:pl-1 md:p-9 mt-4 md:mt-0">
+        <div className="p-6 md:p-10 flex flex-col justify-center">
           {product?.discount && (
-            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{product.discount}</span>
+            <div className="mb-2">
+              <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{product.discount}</span>
+            </div>
           )}
 
-          <h2 className="text-xl md:text-3xl mt-2 font-bold text-black">{product.name}</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-black leading-tight">{product.name}</h2>
 
-          <div className="mt-4">
-            <span className="text-primary text-3xl font-bold">
+          <div className="mt-4 flex items-baseline gap-3">
+            <span className="text-primary text-3xl font-extrabold text-[#212e58ff]">
               Rs. {displayPrice}.00
             </span>
             {displayOldPrice != null && (
-              <span className="line-through text-gray-600 text-2xl ml-2">Rs. {displayOldPrice}.00</span>
+              <span className="line-through text-gray-400 text-xl font-medium">Rs. {displayOldPrice}.00</span>
             )}
           </div>
 
+          <div className="border-t border-gray-100 my-6"></div>
+
           {hasSizes && (
-            <>
-              <p className="text-gray-700 mt-4">Weight: <b>{typeof selectedSize === "object" ? selectedSize?.label : selectedSize}</b></p>
-              <div className="flex gap-2 mt-6">
+            <div className="mb-6">
+              <p className="text-sm font-bold text-gray-900 mb-3">SELECT WEIGHT</p>
+              <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s, index) => {
                   const label = typeof s === "object" ? s.label : s;
                   const isActive = typeof selectedSize === "object" && typeof s === "object"
@@ -158,24 +176,24 @@ export default function ProductModal({ product, onClose }) {
                     <button
                       key={s._id || index}
                       onClick={() => setSelectedSize(s)}
-                      className={`border px-5 py-2.5 border-gray-300 text-sm text-black ${isActive ? "bg-black text-white" : ""}`}>
+                      className={`border px-4 py-2 text-sm font-medium transition-all ${isActive ? "bg-black text-white border-black" : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"}`}>
                       {label}
                     </button>
                   );
                 })}
               </div>
-            </>
+            </div>
           )}
 
           {hasColors && (
-            <div className="mt-4">
-              <span className="text-gray-700">Color: <b>{selectedColor}</b></span>
-              <div className="flex gap-2 mt-2">
+            <div className="mb-6">
+              <p className="text-sm font-bold text-gray-900 mb-3">COLOR: <span className="text-gray-500 font-normal">{selectedColor}</span></p>
+              <div className="flex flex-wrap gap-2">
                 {product.colors.map((color, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedColor(color)}
-                    className={`border px-5 py-2.5 border-gray-300 text-sm text-black ${selectedColor === color ? "bg-black text-white" : ""}`}>
+                    className={`border px-4 py-2 text-sm font-medium transition-all ${selectedColor === color ? "bg-black text-white border-black" : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"}`}>
                     {color}
                   </button>
                 ))}
@@ -183,25 +201,32 @@ export default function ProductModal({ product, onClose }) {
             </div>
           )}
 
-          <div className="flex items-center gap-4 mt-5">
-
-            <div className="flex items-center border border-gray-300 bg-gray-50 rounded-full px-6 py-3 text-black">
-              <button onClick={decreaseQty}>−</button>
-              <span className="mx-3">{qty}</span>
-              <button onClick={increaseQty}>+</button>
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-auto">
+            <div className="flex items-center border border-gray-200 bg-gray-50 rounded-full h-14 px-6 text-black font-bold">
+              <button onClick={decreaseQty} className="w-6 text-xl">−</button>
+              <span className="flex-1 text-center min-w-[40px]">{qty}</span>
+              <button onClick={increaseQty} className="w-6 text-xl">+</button>
             </div>
 
-            <button onClick={handleAddToCart} className="bg-gray-800 text-white w-full py-4 rounded-full">
+            <button 
+              onClick={handleAddToCart} 
+              className="bg-black text-white w-full h-14 rounded-full font-bold hover:bg-gray-800 transition shadow-lg shadow-black/10"
+            >
               Add to Cart
             </button>
           </div>
 
-          <button onClick={handleBuyNow} className="bg-primary hover:bg-primary-hover text-white w-full py-4 rounded-full mt-4 transition-colors">
+          <button 
+            onClick={handleBuyNow} 
+            className="w-full h-14 rounded-full mt-3 font-bold transition-all shadow-lg shadow-primary/20"
+            style={{ backgroundColor: 'var(--primary)', color: 'white' }}
+          >
             Buy it now
           </button>
-          <div className="md:pt-15">
-            <Link href={`/shop/${product.slug}`} className="p-3 text-sm font-bold cursor-pointer text-black">
-              View Full Details »
+          
+          <div className="mt-6 text-center">
+            <Link href={`/shop/${product.slug}`} className="text-sm font-bold text-black hover:underline inline-flex items-center gap-1">
+              View Full Details <i className="fa-solid fa-arrow-right text-[10px]"></i>
             </Link>
           </div>
         </div>

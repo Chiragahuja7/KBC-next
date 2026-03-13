@@ -41,22 +41,21 @@ export default function CartModal({ cartItems, onClose }) {
           <button onClick={handleClose} className="absolute right-4 top-4 text-xl ease-out transition-all duration-700">✕</button>
 
           <h2 className="text-2xl font-bold mb-4 mt-4 ms-2">Shopping Cart ({cartItems.length})</h2>
-          <div className="bg-gray-100 p-6">
-            <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-              <div className="bg-primary h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
+          <div className="bg-gray-50 p-4 border-b border-gray-200">
+            <div className="flex items-center gap-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <div className="flex items-center gap-1">
+                <i className="fa-solid fa-check text-primary"></i>
+                <span>100% Quality</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <i className="fa-solid fa-truck-fast text-primary"></i>
+                <span>Fast Shipping</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <i className="fa-solid fa-lock text-primary"></i>
+                <span>Secure</span>
+              </div>
             </div>
-
-            {total >= 500 ? (
-              <div className="mt-2">
-                <p className="text-primary font-bold">🎉 You qualify for free shipping!</p>
-              </div>
-            ) : (
-              <div className="flex mt-2">
-                <p>Spend Rs 500 to get </p><p className="text-primary ms-1">Free shipping!</p>
-              </div>
-            )
-            }
-
           </div>
 
           {cartItems.length === 0 ? (<p className="text-gray-500 ms-1 p-4">Your cart is empty.</p>) : (

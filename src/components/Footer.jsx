@@ -23,7 +23,7 @@ export default function Footer() {
               <i className="fa-solid fa-phone"></i> +91-9821005872
             </p>
             <p className="text-sm flex items-center gap-2">
-              <i className="fa-solid fa-envelope"></i> info@kunjbiharicollection.in
+              <i className="fa-solid fa-envelope"></i> info@kunjbiharicollections.in
             </p>
           </div>
           <div className="flex gap-3 mt-5">
@@ -58,4 +58,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+}

@@ -64,7 +64,11 @@ export default function AllProducts() {
 
             <div className="bg-white rounded-2xl shadow-md p-6 overflow-x-auto">
                 {loading ? (
-                    <div>Loading...</div>
+                    <div className="space-y-4 animate-pulse">
+                        {[...Array(5)].map((_, i) => (
+                            <div key={i} className="h-12 bg-gray-100 rounded w-full"></div>
+                        ))}
+                    </div>
                 ) : products.length === 0 ? (
                     <p className="text-gray-500">No products yet.</p>
                 ) : (

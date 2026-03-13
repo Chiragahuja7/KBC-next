@@ -50,7 +50,7 @@ export default async function AdminOrdersPage({ searchParams }){
                                                 {order.items.map((it, idx) => (
                                                     <li key={idx} className="text-sm mb-1">
                                                         <a 
-                                                            href={`https://kunjbiharicollection.in/shop/${it.slug}`} 
+                                                            href={`https://kunjbiharicollections.in/shop/${it.slug}`} 
                                                             target="_blank" 
                                                             className="text-blue-600 hover:underline font-medium"
                                                         >

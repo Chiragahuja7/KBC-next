@@ -136,7 +136,11 @@ export default function BannersAdmin() {
             <div className="bg-white rounded-2xl shadow-md p-6">
                 <h2 className="text-xl font-semibold mb-4">Current Banners</h2>
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-pulse">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="bg-gray-100 h-48 rounded-xl"></div>
+                        ))}
+                    </div>
                 ) : banners.length === 0 ? (
                     <p className="text-gray-500">No banners yet. Add one above.</p>
                 ) : (

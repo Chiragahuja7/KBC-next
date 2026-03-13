@@ -77,7 +77,13 @@ export default function SearchModal({ isOpen, onClose, searchQuery }) {
           </div>
 
           <div className="mt-4 text-black">
-            {loading && <div>Loading...</div>}
+            {loading && (
+              <div className="flex gap-4 overflow-hidden">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="w-48 h-48 bg-gray-100 rounded animate-pulse shrink-0"></div>
+                ))}
+              </div>
+            )}
             {!loading && results.length === 0 && (
               <div className="text-sm text-gray-500">No results</div>
             )}

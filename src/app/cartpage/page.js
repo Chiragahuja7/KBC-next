@@ -114,25 +114,32 @@ export default function CartPage() {
 
                 <aside className="w-full lg:w-96">
                     <div className="bg-gray-100 rounded-xl p-6 shadow-sm">
-                        <div className="mb-4">
-                            <div className="bg-gray-100 p-6">
-                                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                                    <div className="bg-primary h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
+                        <div className="mb-6">
+                            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex items-center gap-3 text-gray-700">
+                                        <i className="fa-solid fa-shield-halved text-primary text-xl"></i>
+                                        <div>
+                                            <p className="font-bold text-sm">Secure Shopping</p>
+                                            <p className="text-xs text-gray-500">Your product is always protected</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-gray-700">
+                                        <i className="fa-solid fa-truck-fast text-primary text-xl"></i>
+                                        <div>
+                                            <p className="font-bold text-sm">Fast Dispatch</p>
+                                            <p className="text-xs text-gray-500">Orders shipped within 24-48 hours</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-gray-700">
+                                        <i className="fa-solid fa-star text-primary text-xl"></i>
+                                        <div>
+                                            <p className="font-bold text-sm">Premium Quality</p>
+                                            <p className="text-xs text-gray-500">Curated collections for you</p>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                {total >= 500 ? (
-                                    <div className="mt-2">
-                                        <p className="text-primary font-bold">🎉 You qualify for free shipping!</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex mt-2">
-                                        <p>Spend Rs 500 to get </p><p className="text-primary ms-1">Free shipping!</p>
-                                    </div>
-                                )
-                                }
-
                             </div>
-                            <p className="mt-4 text-gray-700">Congratulations! You've got free shipping!</p>
                         </div>
 
                         <div className="border-t border-b py-4 my-4">

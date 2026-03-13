@@ -93,7 +93,11 @@ export default function CategoriesAdmin() {
             <div className="bg-white rounded-2xl shadow-md p-6">
                 <h2 className="text-xl font-semibold mb-4">Current Categories</h2>
                 {loading ? (
-                    <p>Loading...</p>
+            <div className="space-y-2 animate-pulse mt-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-10 bg-gray-100 rounded w-full"></div>
+              ))}
+            </div>
                 ) : categories.length === 0 ? (
                     <p className="text-gray-500">No categories yet.</p>
                 ) : (

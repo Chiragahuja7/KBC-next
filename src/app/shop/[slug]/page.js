@@ -9,6 +9,7 @@ import ProductModal from "@/src/components/ProductsModal";
 import { useCart } from "@/src/Context/CartContext";
 import CartModal from "@/src/components/CartModal";
 import CheckoutModal from "@/src/components/CheckoutModal";
+import ProductSkeleton from "@/src/components/ProductSkeleton";
 
 export default function Page() {
   const { slug } = useParams();
@@ -81,7 +82,7 @@ export default function Page() {
     }
   }, [product]);
 
-  if (loading) return <div className="p-9 m-9 text-2xl text-black">Loading...</div>;
+  if (loading) return <ProductSkeleton />;
   if (error) return <div className="p-9 m-9 text-red-600">Error: {error}</div>;
   if (!product) return <div className="p-9 m-9">Product not found</div>;
 
@@ -295,7 +296,7 @@ export default function Page() {
                   <path d="M2.962 8.3 14 14.687l10.962-6.35M14 26.013V14.675" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                   <path d="M11.412 2.1 4.737 5.813c-1.512.837-2.75 2.937-2.75 4.662v7.063c0 1.724 1.238 3.825 2.75 4.662l6.675 3.713c1.425.787 3.763.787 5.188 0l6.675-3.713c1.512-.837 2.75-2.938 2.75-4.662v-7.063c0-1.725-1.238-3.825-2.75-4.662L16.6 2.1c-1.438-.8-3.763-.8-5.188 0Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
-                <p>Free shipping on all orders above 500</p>
+                <p>Fast and Safe Shipping</p>
               </div>
             </div>
 
