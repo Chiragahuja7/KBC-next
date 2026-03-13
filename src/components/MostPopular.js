@@ -31,7 +31,7 @@ export default function MostPopular() {
                 <div className="p-4 flex justify-between items-center">
                     <span className="text-black text-4xl font-bold">Most Popular Products</span>
                     <div className="flex gap-4">
-                        <span className="text-green-700 font-semibold">Most Popular</span>
+                        <span className="font-semibold" style={{ color: 'var(--primary)' }}>Most Popular</span>
                         <Link className="text-gray-500" href="/shop">View All »</Link>
                     </div>
                 </div>
@@ -51,12 +51,12 @@ export default function MostPopular() {
                                 </Link>
                                 <h3 className="text-black font-semibold mt-3 text-center">{item.name}</h3>
                                 <div className="text-center mt-1">
-                                    <span className="text-green-700 font-bold">Rs. {item.price}.00</span>
+                                    <span className="font-bold" style={{ color: 'var(--primary)' }}>Rs. {item.price}.00</span>
                                     <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>
                                 </div>
 
                                 <button onClick={() => setSelectedProduct(item)}
-                                    className="mt-4 border text-[#0f5b3f] font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-[#0f5b3f] transition">
+                                    className="mt-4 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition">
                                     Add to Cart
                                 </button>
                             </div>

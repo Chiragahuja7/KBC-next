@@ -43,16 +43,16 @@ export default function CartModal({ cartItems, onClose }) {
           <h2 className="text-2xl font-bold mb-4 mt-4 ms-2">Shopping Cart ({cartItems.length})</h2>
           <div className="bg-gray-100 p-6">
             <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-              <div className="bg-green-900 h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
+              <div className="bg-primary h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
             </div>
 
             {total >= 500 ? (
               <div className="mt-2">
-                <p className="text-green-900 font-bold">🎉 You qualify for free shipping!</p>
+                <p className="text-primary font-bold">🎉 You qualify for free shipping!</p>
               </div>
             ) : (
               <div className="flex mt-2">
-                <p>Spend Rs 500 to get </p><p className="text-green-900 ms-1">Free shipping!</p>
+                <p>Spend Rs 500 to get </p><p className="text-primary ms-1">Free shipping!</p>
               </div>
             )
             }
@@ -83,7 +83,7 @@ export default function CartModal({ cartItems, onClose }) {
                           </p>
                         )}
                         <div className="flex">
-                          <p className="text-green-800 font-bold">
+                          <p className="text-primary font-bold">
                             Rs.{item.price}
                           </p>
                           {item.oldPrice != null && (
@@ -112,7 +112,7 @@ export default function CartModal({ cartItems, onClose }) {
                   <span>Rs.{total}</span>
                 </div>
                 <div>
-                  <button onClick={handleCartPage} className=" bg-white text-green-950 w-full px-10 py-3 rounded-full">View Cart</button>
+                  <button onClick={handleCartPage} className=" bg-white border border-primary text-primary w-full px-10 py-3 rounded-full hover:bg-primary hover:text-white transition">View Cart</button>
                   <button onClick={() => setShowCheckout(true)} className="bg-[#444444] mt-4 text-white w-full px-10 py-3 rounded-full">Checkout</button>
                 </div>
               </div>

@@ -33,7 +33,7 @@ export default function Testimonials(){
                     </div>
                     <span className="flex justify-center font-bold">{item.itemName}</span>
                     <div className="text-center mt-1">
-                    <span className="text-green-700 font-bold">Rs.{item.price}.00</span>
+                    <span className="text-primary font-bold">Rs.{item.price}.00</span>
                     <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>
                     </div>
                     </div>
@@ -62,7 +62,7 @@ export default function Testimonials(){
                     </div>
                     <span className="flex justify-center font-bold">{item.itemName}</span>
                     <div className="text-center mt-1">
-                    <span className="text-green-700 font-bold">Rs.{item.price}.00</span>
+                    <span className="text-primary font-bold">Rs.{item.price}.00</span>
                     <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>
                     </div>
                     </div>

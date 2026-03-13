@@ -69,7 +69,7 @@ export default function CartPage() {
                                     </div>
 
                                     <div className="md:col-span-2">
-                                        <p className="text-green-800 font-bold">Rs. {Number(price).toLocaleString()}</p>
+                                        <p className="text-primary font-bold">Rs. {Number(price).toLocaleString()}</p>
                                     </div>
 
                                     <div className="md:col-span-2">
@@ -95,7 +95,7 @@ export default function CartPage() {
                                 <img src="https://refineveda.com/cdn/shop/files/complete_wellness_kit-Photoroom.jpg?v=1763637235&width=720" alt="suggestion" className="w-24 h-24 object-cover rounded" />
                                 <div>
                                     <h3 className="font-medium">Sarva Arogya - Complete Wellness Kit</h3>
-                                    <p className="text-green-800 font-bold mt-1">Rs. 999.00 <span className="line-through text-gray-400 ml-2">Rs. 2,197.00</span></p>
+                                    <p className="text-primary font-bold mt-1">Rs. 999.00 <span className="line-through text-gray-400 ml-2">Rs. 2,197.00</span></p>
                                     <button className="mt-3 underline text-sm text-gray-800">Add to Cart</button>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@ export default function CartPage() {
                                 <img src="https://refineveda.com/cdn/shop/files/migrainekit-Photoroom_2.jpg?v=1761904777&width=720" alt="suggestion2" className="w-24 h-24 object-cover rounded" />
                                 <div>
                                     <h3 className="font-medium">Migraine Kit - Best For Headache Relief</h3>
-                                    <p className="text-green-800 font-bold mt-1">Rs. 799.00 <span className="line-through text-gray-400 ml-2">Rs. 999.00</span></p>
+                                    <p className="text-primary font-bold mt-1">Rs. 799.00 <span className="line-through text-gray-400 ml-2">Rs. 999.00</span></p>
                                     <button className="mt-3 underline text-sm text-gray-800">Add to Cart</button>
                                 </div>
                             </div>
@@ -117,16 +117,16 @@ export default function CartPage() {
                         <div className="mb-4">
                             <div className="bg-gray-100 p-6">
                                 <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                                    <div className="bg-green-900 h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
+                                    <div className="bg-primary h-4 rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.min(100, (total / 500) * 100)}%` }}></div>
                                 </div>
 
                                 {total >= 500 ? (
                                     <div className="mt-2">
-                                        <p className="text-green-900 font-bold">🎉 You qualify for free shipping!</p>
+                                        <p className="text-primary font-bold">🎉 You qualify for free shipping!</p>
                                     </div>
                                 ) : (
                                     <div className="flex mt-2">
-                                        <p>Spend Rs 500 to get </p><p className="text-green-900 ms-1">Free shipping!</p>
+                                        <p>Spend Rs 500 to get </p><p className="text-primary ms-1">Free shipping!</p>
                                     </div>
                                 )
                                 }

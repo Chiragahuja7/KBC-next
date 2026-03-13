@@ -14,7 +14,7 @@ export default function Header(){
     const { cartItems } = useCart();
 
     return(
-        <header className="bg-[#0f5b3f] p-4 relative">
+        <header className="p-4 relative" style={{ backgroundColor: 'var(--primary)' }}>
             <div className="flex justify-between items-center ms-5 mb-4">
 
                 <div className="md:hidden">

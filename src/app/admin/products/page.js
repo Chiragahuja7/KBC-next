@@ -99,7 +99,7 @@ export default function AllProducts() {
                                     </td>
                                     <td className="p-3 border text-sm">
                                         {p.isListed !== false
-                                            ? <span className="inline-block bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">Listed</span>
+                                            ? <span className="inline-block bg-primary-light text-primary px-2 py-0.5 rounded-full text-xs">Listed</span>
                                             : <span className="inline-block bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">Unlisted</span>
                                         }
                                     </td>

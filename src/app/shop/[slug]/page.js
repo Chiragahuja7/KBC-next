@@ -189,7 +189,7 @@ export default function Page() {
             <span className="text-gray-700">Refineveda</span>
             <h1 className="text-3xl">{product.name}</h1>
             <div className="flex">
-              <p className="text-green-700 text-2xl mt-3">
+              <p className="text-primary text-2xl mt-3">
                 Rs. {selectedSize && typeof selectedSize === 'object' && selectedSize.price ? selectedSize.price : product.price}.00
               </p>
               {(selectedSize && typeof selectedSize === 'object' && selectedSize.oldPrice ? selectedSize.oldPrice : product.oldPrice) != null && (
@@ -266,7 +266,7 @@ export default function Page() {
               }}
               >Add to Cart</button>
             </div>
-            <button className="bg-green-900 mt-2 text-white w-full px-10 py-4 rounded-full"
+            <button className="bg-primary hover:bg-primary-hover transition-colors mt-2 text-white w-full px-10 py-4 rounded-full"
               onClick={() => {
                 directBuy(product, selectedSize, quantity, selectedColor);
                 setShowCheckout(true);
@@ -324,7 +324,7 @@ export default function Page() {
 
           </div>
         </div>
-        <Marquee className="text-white bg-[#0f5b3f]" speed={150} pauseOnHover={true} >
+        <Marquee className="text-white bg-primary" speed={150} pauseOnHover={true} >
           <div className="my-3 flex gap-20 font-bold">
             <p>
               😍Shop for ₹499+ GET 1 FREE GIFT!🎁
@@ -390,7 +390,7 @@ export default function Page() {
               </h3>
 
               <div className="text-center mt-2">
-                <span className="text-green-700 font-bold text-lg">
+                <span className="text-primary font-bold text-lg">
                   Rs. {item.price}.00
                 </span>
                 <span className="text-gray-400 line-through ms-2">
@@ -400,7 +400,7 @@ export default function Page() {
 
               <button
                 onClick={() => setSelectedProduct(item)}
-                className="mt-5 border-2 border-gray-300 text-[#0f5b3f] font-semibold w-full py-3 rounded-full hover:bg-[#0f5b3f] hover:text-white transition"
+                className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
               >
                 Add to Cart
               </button>
@@ -458,7 +458,7 @@ export default function Page() {
               </h3>
 
               <div className="text-center mt-2">
-                <span className="text-green-700 font-bold text-lg">
+                <span className="text-primary font-bold text-lg">
                   Rs. {item.price}.00
                 </span>
                 <span className="text-gray-400 line-through ms-2">
@@ -468,7 +468,7 @@ export default function Page() {
 
               <button
                 onClick={() => setSelectedProduct(item)}
-                className="mt-5 border-2 border-gray-300 text-[#0f5b3f] font-semibold w-full py-3 rounded-full hover:bg-[#0f5b3f] hover:text-white transition"
+                className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
               >
                 Add to Cart
               </button>

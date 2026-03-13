@@ -1,8 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import ConditionalHeader from "../components/ConditionalHeader";
+import ConditionalFooter from "../components/ConditionalFooter";
 import { CartContext, CartProvider } from "../Context/CartContext";
+import { themeConfig } from "../data/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +25,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        style={{
+          '--primary': themeConfig.primary,
+          '--primary-hover': themeConfig.primaryHover,
+          '--primary-light': themeConfig.primaryLight,
+        }}
       >
         <CartProvider>
-          <Header />
+          <ConditionalHeader />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -37,7 +43,7 @@ export default function RootLayout({ children }) {
         <main className="grow">
           {children}
         </main>
-        <Footer/>
+        <ConditionalFooter/>
         </CartProvider>
       </body>
     </html>

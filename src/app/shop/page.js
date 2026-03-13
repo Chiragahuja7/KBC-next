@@ -109,7 +109,7 @@ export default function Shop() {
                         <div className="space-y-1">
                             <Link
                                 href="/shop"
-                                className={`block py-2 px-3 rounded-lg text-sm transition ${!activeCategory ? 'bg-[#0f5b3f] text-white font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
+                                className={`block py-2 px-3 rounded-lg text-sm transition ${!activeCategory ? 'bg-primary text-white font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
                             >
                                 All Products
                             </Link>
@@ -117,7 +117,7 @@ export default function Shop() {
                                 <Link
                                     key={index}
                                     href={`/shop?category=${encodeURIComponent(category)}`}
-                                    className={`block py-2 px-3 rounded-lg text-sm transition ${activeCategory === category ? 'bg-[#0f5b3f] text-white font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
+                                    className={`block py-2 px-3 rounded-lg text-sm transition ${activeCategory === category ? 'bg-primary text-white font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
                                 >
                                     {category}
                                 </Link>
@@ -145,20 +145,20 @@ export default function Shop() {
                                 }}
                                 onMouseUp={() => updateQuery({ maxPrice: maxPrice === 5000 ? null : String(maxPrice) })}
                                 onTouchEnd={() => updateQuery({ maxPrice: maxPrice === 5000 ? null : String(maxPrice) })}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0f5b3f]"
+                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
                             />
                             <div className="flex gap-2 mt-3">
                                 <button
                                     onClick={() => { setMaxPrice(500); updateQuery({ maxPrice: "500" }); }}
-                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice === 500 ? 'bg-[#0f5b3f] text-white border-[#0f5b3f]' : 'border-gray-300 hover:bg-gray-100'}`}
+                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice === 500 ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-100'}`}
                                 >Under ₹500</button>
                                 <button
                                     onClick={() => { setMaxPrice(1000); updateQuery({ maxPrice: "1000" }); }}
-                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice === 1000 ? 'bg-[#0f5b3f] text-white border-[#0f5b3f]' : 'border-gray-300 hover:bg-gray-100'}`}
+                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice === 1000 ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-100'}`}
                                 >Under ₹1000</button>
                                 <button
                                     onClick={() => { setMaxPrice(5000); updateQuery({ maxPrice: null }); }}
-                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice >= 5000 ? 'bg-[#0f5b3f] text-white border-[#0f5b3f]' : 'border-gray-300 hover:bg-gray-100'}`}
+                                    className={`text-xs px-3 py-1 rounded-full border transition ${maxPrice >= 5000 ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-100'}`}
                                 >All</button>
                             </div>
                         </div>
@@ -202,7 +202,7 @@ export default function Shop() {
                             <select
                                 value={sortValue}
                                 onChange={(e) => { setSortValue(e.target.value); updateQuery({ sort: e.target.value || null }); }}
-                                className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0f5b3f] focus:border-transparent"
+                                className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             >
                                 <option value="">Sort By</option>
                                 <option value="priceLowHigh">Price: Low to High</option>
@@ -233,7 +233,7 @@ export default function Shop() {
                             <svg className="mx-auto mb-4" width="64" height="64" fill="none" stroke="#9ca3af" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             <h3 className="text-xl font-semibold text-gray-700">No products found</h3>
                             <p className="text-gray-400 mt-2">Try adjusting your filters or browse all products</p>
-                            <Link href="/shop" className="inline-block mt-4 bg-[#0f5b3f] text-white px-6 py-2 rounded-full hover:bg-[#0d4e36] transition">
+                            <Link href="/shop" className="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-hover transition">
                                 View All Products
                             </Link>
                         </div>
@@ -247,21 +247,48 @@ export default function Shop() {
                                     const imgHeight = gridCols === 4 ? 'h-48' : gridCols === 1 ? 'h-48' : 'h-52 md:h-72';
                                     return (
                                         <div key={item._id} className="bg-white rounded-2xl p-3 group/card hover:shadow-lg transition-shadow duration-300">
+                                            
                                             <Link href={`/shop/${item.slug}`} className="block overflow-hidden rounded-xl group relative">
-                                                <Image src={primaryImg} height={300} width={400} alt={item.name} className={`rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear w-full object-cover ${imgHeight}`} />
-                                                <Image src={hoverImg} height={300} width={400} alt="Hover" className={`rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear w-full object-cover ${imgHeight}`} />
+                                                <Image 
+                                                    src={primaryImg}
+                                                    height={300}
+                                                    width={400}
+                                                    alt={item.name}
+                                                    className={`rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear w-full object-cover ${imgHeight}`}
+                                                />
+
+                                                <Image
+                                                    src={hoverImg}
+                                                    height={300}
+                                                    width={400}
+                                                    alt="Hover"
+                                                    className={`rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear w-full object-cover ${imgHeight}`}
+                                                />
                                             </Link>
-                                            <h3 className={`text-black font-semibold mt-3 text-center ${gridCols === 4 ? 'text-sm' : ''}`}>{item.name}</h3>
-                                            <div className="text-center mt-1">
-                                                <span className={`text-green-700 font-bold ${gridCols === 4 ? 'text-sm' : ''}`}>Rs. {item.price}.00</span>
-                                                {item.oldPrice && <span className={`text-gray-400 line-through ms-2 ${gridCols === 4 ? 'text-xs' : ''}`}>Rs. {item.oldPrice}.00</span>}
+
+                                            <h3 className={`text-black font-semibold mt-3 text-center ${gridCols === 4 ? 'text-sm' : ''}`}>
+                                                {item.name}
+                                            </h3>
+
+                                            <div className="text-center">
+                                                <span className={`text-primary font-bold ${gridCols === 4 ? 'text-sm' : ''}`}>
+                                                    Rs. {item.price}.00
+                                                </span>
+
+                                                {item.oldPrice && (
+                                                    <span className={`text-gray-400 line-through ms-2 ${gridCols === 4 ? 'text-xs' : ''}`}>
+                                                        Rs. {item.oldPrice}.00
+                                                    </span>
+                                                )}
                                             </div>
+
                                             <button
-                                                className={`mt-3 border text-[#0f5b3f] font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-[#0f5b3f] transition ${gridCols === 4 ? 'text-sm py-1.5' : ''}`}
+                                                className={`mt-3 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition ${gridCols === 4 ? 'text-sm py-1.5' : ''}`}
                                                 onClick={() => setSelectedProduct(item)}
                                             >
                                                 Add to Cart
                                             </button>
+
                                         </div>
                                     )
                                 })}
@@ -282,7 +309,7 @@ export default function Shop() {
                                         <button
                                             key={p}
                                             onClick={() => updateQuery({ page: p })}
-                                            className={`w-10 h-10 rounded-lg text-sm font-medium transition ${p === pageState ? 'bg-[#0f5b3f] text-white' : 'border border-gray-300 hover:bg-gray-100'}`}
+                                            className={`w-10 h-10 rounded-lg text-sm font-medium transition ${p === pageState ? 'bg-primary text-white' : 'border border-gray-300 hover:bg-gray-100'}`}
                                         >
                                             {p}
                                         </button>

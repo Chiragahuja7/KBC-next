@@ -5,7 +5,8 @@ import Link from "next/link";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminOrdersPage({ searchParams }){
-    const page = Math.max(1, parseInt(searchParams?.page) || 1);
+    const sp = await searchParams;
+    const page = Math.max(1, parseInt(sp?.page) || 1);
     const limit = 10;
     const skip = (page - 1) * limit;
 
@@ -56,7 +57,7 @@ export default async function AdminOrdersPage({ searchParams }){
                                                             {it.name}
                                                         </a>
                                                         <span className="text-gray-500 ml-1">
-                                                            ({it.size || 'N/A'}{it.color ? `, ${it.color}` : ''})
+                                                            ({it.size || it.selectedSize || 'N/A'}{it.color ? `, ${it.color}` : ''})
                                                         </span>
                                                         <span className="font-bold ml-1">×{it.qty}</span>
                                                     </li>
@@ -75,11 +76,11 @@ export default async function AdminOrdersPage({ searchParams }){
                         </tbody>
                     </table>
 
-                    <div className="mt-4 flex items-center justify-between text-sm text-gray-700">
-                        <div>
-                            Showing {(skip + 1)} - {Math.min(skip + orders.length, total)} of {total} orders
+                    <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-700">
+                        <div className="text-center sm:text-left">
+                            Showing {(skip + 1)} - {Math.min(skip + (orders?.length || 0), total)} of {total} orders
                         </div>
-                        <div className="space-x-3">
+                        <div className="flex items-center space-x-3">
                             <Link 
                                 className={`px-3 py-1 bg-gray-100 rounded ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`} 
                                 href={`?page=${page - 1}`}

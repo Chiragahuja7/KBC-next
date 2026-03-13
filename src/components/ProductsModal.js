@@ -137,7 +137,7 @@ export default function ProductModal({ product, onClose }) {
           <h2 className="text-xl md:text-3xl mt-2 font-bold text-black">{product.name}</h2>
 
           <div className="mt-4">
-            <span className="text-green-700 text-3xl font-bold">
+            <span className="text-primary text-3xl font-bold">
               Rs. {displayPrice}.00
             </span>
             {displayOldPrice != null && (
@@ -196,7 +196,7 @@ export default function ProductModal({ product, onClose }) {
             </button>
           </div>
 
-          <button onClick={handleBuyNow} className="bg-green-900 text-white w-full py-4 rounded-full mt-4">
+          <button onClick={handleBuyNow} className="bg-primary hover:bg-primary-hover text-white w-full py-4 rounded-full mt-4 transition-colors">
             Buy it now
           </button>
           <div className="md:pt-15">

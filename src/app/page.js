@@ -12,8 +12,8 @@ export default function Home() {
     <SecondSlider/>
     <BestSeller/>
     <MostPopular/>
-    <Testimonials/>
-    <LastSlider/>
+    {/* <Testimonials/> */}
+    {/* <LastSlider/> */}
     </>
   );
 }

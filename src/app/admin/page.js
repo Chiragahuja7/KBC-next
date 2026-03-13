@@ -300,11 +300,11 @@ export default function Admin() {
               Most Popular
             </label>
             <label className="flex items-center gap-2 font-medium cursor-pointer">
-              <div className={`relative w-11 h-6 rounded-full transition-colors ${form.isListed ? 'bg-green-500' : 'bg-gray-300'}`}>
+              <div className={`relative w-11 h-6 rounded-full transition-colors ${form.isListed ? 'bg-primary' : 'bg-gray-300'}`}>
                 <input type="checkbox" checked={form.isListed} onChange={(e) => setForm({ ...form, isListed: e.target.checked })} className="sr-only" />
                 <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.isListed ? 'translate-x-5' : 'translate-x-0.5'}`} onClick={() => setForm({ ...form, isListed: !form.isListed })} />
               </div>
-              <span className={form.isListed ? 'text-green-700' : 'text-gray-500'}>{form.isListed ? "Listed" : "Unlisted"}</span>
+              <span className={form.isListed ? 'text-primary' : 'text-gray-500'}>{form.isListed ? "Listed" : "Unlisted"}</span>
             </label>
           </div>
 

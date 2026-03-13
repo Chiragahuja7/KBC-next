@@ -100,7 +100,7 @@ export default function SearchModal({ isOpen, onClose, searchQuery }) {
                         />
                       </div>
                       <div className="mt-2 text-sm font-medium">{p.name}</div>
-                      <div className="text-sm text-green-700">
+                      <div className="text-sm text-primary">
                         ₹{p.price || ""}
                       </div>
                     </Link>
