@@ -86,7 +86,7 @@ export default function BestSeller() {
                                                 <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>
                                             </div>
 
-                                            <button className="mt-4 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition">
+                                            <button onClick={() => setSelectedProduct(item)} className="mt-4 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition">
                                                 Add to Cart
                                             </button>
                                         </div>
