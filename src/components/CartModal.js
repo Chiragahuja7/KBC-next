@@ -66,7 +66,7 @@ export default function CartModal({ cartItems, onClose }) {
                   {cartItems.map((item, index) => (
                     <li key={index} className="flex mb-4 p-4 border-b border-gray-200">
                       <img
-                        src={item.images?.[0]?.url}
+                        src={item.cartImage || item.images?.[0]?.url}
                         alt={item.name}
                         className="w-25 h-30 object-cover rounded mr-4"
                       />
@@ -74,7 +74,12 @@ export default function CartModal({ cartItems, onClose }) {
                         <h3 className="font-semibold">{item.name}</h3>
                         {item.selectedSize && (
                           <p className="text-sm text-gray-500">
-                            Size: {item.selectedSize}
+                            Size: {typeof item.selectedSize === "object" ? item.selectedSize.label : item.selectedSize}
+                          </p>
+                        )}
+                        {item.selectedColor && (
+                          <p className="text-sm text-gray-500">
+                            Color: {item.selectedColor}
                           </p>
                         )}
                         <div className="flex">

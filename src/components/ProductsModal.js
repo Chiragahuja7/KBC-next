@@ -14,7 +14,8 @@ import "swiper/css/pagination";
 import Link from "next/link";
 
 export default function ProductModal({ product, onClose }) {
-  const [variant, setVariant] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("");
   const [qty, setQty] = useState(1);
   const { addToCart, cartItems, directBuy } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -31,7 +32,10 @@ export default function ProductModal({ product, onClose }) {
   useEffect(() => {
     if (!product) return;
     if (Array.isArray(product.sizes) && product.sizes.length > 0) {
-      setVariant((v) => v || product.sizes[0]);
+      setSelectedSize(product.sizes[0]);
+    }
+    if (Array.isArray(product.colors) && product.colors.length > 0) {
+      setSelectedColor(product.colors[0]);
     }
   }, [product]);
 
@@ -42,11 +46,32 @@ export default function ProductModal({ product, onClose }) {
   }
 
   const hasSizes = Array.isArray(product?.sizes) && product.sizes.length > 0;
+  const hasColors = Array.isArray(product?.colors) && product.colors.length > 0;
 
-  // Gallery always uses global product images
-  const gallery = Array.isArray(product?.images)
-    ? product.images.map(imgUrl).filter(Boolean)
-    : [];
+  // Determine current display price based on selected size
+  const displayPrice = selectedSize && typeof selectedSize === "object" && selectedSize.price
+    ? selectedSize.price
+    : product?.price;
+
+  const displayOldPrice = selectedSize && typeof selectedSize === "object" && selectedSize.oldPrice
+    ? selectedSize.oldPrice
+    : product?.oldPrice;
+
+  // Gallery: use size image if available, otherwise global product images
+  const gallery = (() => {
+    // If a size is selected and has its own image, show that first
+    const imgs = [];
+    if (selectedSize && typeof selectedSize === "object" && selectedSize.image?.url) {
+      imgs.push(selectedSize.image.url);
+    }
+    if (Array.isArray(product?.images)) {
+      product.images.forEach((img) => {
+        const url = imgUrl(img);
+        if (url && !imgs.includes(url)) imgs.push(url);
+      });
+    }
+    return imgs;
+  })();
 
   function increaseQty() {
     setQty((prev) => prev + 1);
@@ -65,6 +90,15 @@ export default function ProductModal({ product, onClose }) {
     };
   }, []);
 
+  function handleAddToCart() {
+    addToCart(product, selectedSize, qty, selectedColor);
+    setIsCartOpen(true);
+  }
+
+  function handleBuyNow() {
+    directBuy(product, selectedSize, qty, selectedColor);
+    setShowCheckout(true);
+  }
 
   return (
     <div
@@ -104,27 +138,49 @@ export default function ProductModal({ product, onClose }) {
 
           <div className="mt-4">
             <span className="text-green-700 text-3xl font-bold">
-              Rs. {product?.price}.00
+              Rs. {displayPrice}.00
             </span>
-            {product?.oldPrice != null && (
-              <span className="line-through text-gray-600 text-2xl ml-2">Rs. {product?.oldPrice}.00</span>
+            {displayOldPrice != null && (
+              <span className="line-through text-gray-600 text-2xl ml-2">Rs. {displayOldPrice}.00</span>
             )}
           </div>
 
           {hasSizes && (
             <>
-              <p className="text-gray-700 mt-4">Weight: <b>{variant}</b></p>
+              <p className="text-gray-700 mt-4">Weight: <b>{typeof selectedSize === "object" ? selectedSize?.label : selectedSize}</b></p>
               <div className="flex gap-2 mt-6">
-                {product.sizes.map((s) => (
+                {product.sizes.map((s, index) => {
+                  const label = typeof s === "object" ? s.label : s;
+                  const isActive = typeof selectedSize === "object" && typeof s === "object"
+                    ? selectedSize?._id === s._id
+                    : selectedSize === s;
+                  return (
+                    <button
+                      key={s._id || index}
+                      onClick={() => setSelectedSize(s)}
+                      className={`border px-5 py-2.5 border-gray-300 text-sm text-black ${isActive ? "bg-black text-white" : ""}`}>
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {hasColors && (
+            <div className="mt-4">
+              <span className="text-gray-700">Color: <b>{selectedColor}</b></span>
+              <div className="flex gap-2 mt-2">
+                {product.colors.map((color, index) => (
                   <button
-                    key={s}
-                    onClick={() => setVariant(s)}
-                    className={`border px-5 py-2.5 border-gray-300  text-sm text-black ${variant === s ? "bg-black text-white" : ""}`}>
-                    {s}
+                    key={index}
+                    onClick={() => setSelectedColor(color)}
+                    className={`border px-5 py-2.5 border-gray-300 text-sm text-black ${selectedColor === color ? "bg-black text-white" : ""}`}>
+                    {color}
                   </button>
                 ))}
               </div>
-            </>
+            </div>
           )}
 
           <div className="flex items-center gap-4 mt-5">
@@ -135,12 +191,12 @@ export default function ProductModal({ product, onClose }) {
               <button onClick={increaseQty}>+</button>
             </div>
 
-            <button onClick={() => { addToCart(product, variant, qty); setIsCartOpen(true); }} className="bg-gray-800 text-white w-full py-4 rounded-full">
+            <button onClick={handleAddToCart} className="bg-gray-800 text-white w-full py-4 rounded-full">
               Add to Cart
             </button>
           </div>
 
-          <button onClick={() => { directBuy(product, variant, qty); setShowCheckout(true); }} className="bg-green-900 text-white w-full py-4 rounded-full mt-4">
+          <button onClick={handleBuyNow} className="bg-green-900 text-white w-full py-4 rounded-full mt-4">
             Buy it now
           </button>
           <div className="md:pt-15">

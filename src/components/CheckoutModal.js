@@ -2,16 +2,6 @@
 import { useState } from "react";
 import { useCart } from "../Context/CartContext";
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
-
 export default function CheckoutModal({ onClose }) {
   const { cartItems, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
@@ -29,62 +19,43 @@ export default function CheckoutModal({ onClose }) {
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const orderRes = await fetch("/api/razorpay/createOrder", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total, currency: "INR" }),
+      // 1. Submit order to database (paymentStatus='pending' since it's WhatsApp/COD flow)
+      await submitOrder("pending");
+
+      // 2. Clear cart and notify success
+      clearCart();
+      onClose();
+
+      // 3. Construct WhatsApp message
+      let message = `*New Order Details*\n\n`;
+      message += `*Customer Information:*\n`;
+      message += `Name: ${name}\n`;
+      message += `Phone: ${phone}\n`;
+      message += `Email: ${email}\n`;
+      message += `Address: ${address}, ${pincode}\n\n`;
+
+      message += `*Items:*\n`;
+      cartItems.forEach((item, index) => {
+        const size = typeof item.selectedSize === "object" ? item.selectedSize.label : (item.selectedSize || "N/A");
+        const color = item.selectedColor || "";
+        const itemLink = `https://kunjbiharicollection.in/shop/${item.slug}`;
+        
+        message += `${index + 1}. ${item.name}`;
+        if (size && size !== "N/A") message += ` (${size})`;
+        if (color) message += ` [Color: ${color}]`;
+        message += ` x ${item.quantity} - Rs.${(item.price ?? 0) * item.quantity}\n`;
+        message += `Link: ${itemLink}\n\n`;
       });
 
-      const orderData = await orderRes.json();
+      message += `*Total Amount: Rs.${total}*`;
 
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "My E-commerce Store",
-        description: "Order Payment",
-        order_id: orderData.id,
-        handler: async function (response) {
-          try {
-            await submitOrder('paid', response);
-            alert('Payment successful and order placed');
-            clearCart();
-            onClose();
-          } catch (e) {
-            console.error(e);
-            alert('Payment succeeded but failed to record order');
-          }
-        },
-        prefill: {
-          name,
-          email,
-          contact: phone,
-        },
-      };
+      // 4. Redirect to WhatsApp
+      const whatsappUrl = `https://wa.me/919821005871?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
 
-      const sdkLoaded = await loadRazorpayScript();
-
-      if (!window.Razorpay) {
-        window.Razorpay = function (opts) {
-          this.opts = opts;
-          this.open = () => {
-            setTimeout(() => {
-              const fakeResponse = {
-                razorpay_payment_id: 'pay_fake_' + Date.now(),
-                razorpay_order_id: opts.order_id,
-                razorpay_signature: 'sig_fake',
-              };
-              if (typeof opts.handler === 'function') opts.handler(fakeResponse);
-            }, 800);
-          };
-        };
-      }
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
     } catch (err) {
       console.error(err);
-      alert("Payment failed to initialize");
+      alert(err.message || "Failed to place order");
     } finally {
       setLoading(false);
     }
@@ -98,7 +69,9 @@ export default function CheckoutModal({ onClose }) {
       name: item.name,
       price: item.price ?? 0,
       qty: item.quantity,
-      size: item.selectedSize || "",
+      size: typeof item.selectedSize === 'object' ? item.selectedSize?.label : (item.selectedSize || ""),
+      color: item.selectedColor || "",
+      slug: item.slug || "",
       image: (item.images && item.images[0]?.url) || "",
     }));
 
@@ -135,13 +108,13 @@ export default function CheckoutModal({ onClose }) {
             {cartItems.map((item, i) => (
               <li key={i} className="flex justify-between py-1 border-b-gray-200 border-b">
                 <img
-                  src={item.images?.[0]?.url}
+                  src={item.cartImage || item.images?.[0]?.url}
                   alt={item.name}
                   className="w-15 h-12 object-cover rounded"
                 />
                 <div>
                   <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-500">{item.selectedSize ? `Size: ${item.selectedSize} × ` : ''}{item.quantity}</p>
+                  <p className="text-sm text-gray-500">{item.selectedSize ? `Size: ${typeof item.selectedSize === 'object' ? item.selectedSize.label : item.selectedSize} × ` : ''}{item.quantity}</p>
                 </div>
                 <div className="font-bold">Rs.{(item.price ?? 0) * item.quantity}</div>
               </li>
@@ -180,7 +153,7 @@ export default function CheckoutModal({ onClose }) {
             <label className="block text-sm font-medium mb-1 mt-2">Pincode</label>
             <input value={pincode} onChange={(e) => setPincode(e.target.value)} type="text" className="w-full border border-gray-300 rounded px-3 py-2" placeholder="Enter your pincode" required />
           </div>
-          <button type="submit" disabled={loading || cartItems.length === 0} className="bg-[#444444] text-white w-full px-4 py-3 rounded-full">{loading ? 'Processing...' : 'Submit'}</button>
+          <button type="submit" disabled={loading || cartItems.length === 0} className="bg-[#444444] text-white w-full px-4 py-3 rounded-full">{loading ? 'Processing...' : 'Place Order on WhatsApp'}</button>
         </form>
       </div>
     </div>

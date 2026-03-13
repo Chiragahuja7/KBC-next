@@ -261,16 +261,14 @@ export default function Page() {
               </div>
 
               <button className="bg-gray-800 text-white w-full sm:w-auto md:px-44 px-5 py-3 rounded-full" onClick={() => {
-                const sizeLabel = typeof selectedSize === 'object' ? selectedSize?.label : selectedSize;
-                addToCart(product, sizeLabel, quantity, selectedColor);
+                addToCart(product, selectedSize, quantity, selectedColor);
                 setIsCartOpen(true);
               }}
               >Add to Cart</button>
             </div>
             <button className="bg-green-900 mt-2 text-white w-full px-10 py-4 rounded-full"
               onClick={() => {
-                const sizeLabel = typeof selectedSize === 'object' ? selectedSize?.label : selectedSize;
-                directBuy(product, sizeLabel, quantity, selectedColor);
+                directBuy(product, selectedSize, quantity, selectedColor);
                 setShowCheckout(true);
               }}
             >Buy It Now</button>

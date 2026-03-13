@@ -35,7 +35,7 @@ export default function FirstSlider() {
         <div className="flex gap-3 p-3 md:overflow-visible">
           {banners.map((b) => (
             <Link key={b._id} href={b.link || "/shop"} className="min-w-full sm:min-w-[60%] md:min-w-0 overflow-hidden rounded-xl flex-1">
-              <img src={b.image?.url} height={100} width={600} className="rounded-xl transition-transform duration-300 hover:scale-110 w-full h-auto object-cover" alt="Banner" />
+              <img src={b.image?.url} className="rounded-xl transition-transform duration-300 hover:scale-110 w-full h-[400px] object-cover" alt="Banner" />
             </Link>
           ))}
         </div>
@@ -48,7 +48,7 @@ export default function FirstSlider() {
               {banners.map((b) => (
                 <SwiperSlide key={b._id}>
                   <Link href={b.link || "/shop"} className="min-w-full sm:min-w-[60%] md:min-w-0 overflow-hidden rounded-xl">
-                    <img src={b.image?.url} height={100} width={500} className="rounded-xl transition-transform duration-300 hover:scale-110 w-full h-auto object-cover" alt="Banner" />
+                    <img src={b.image?.url} className="rounded-xl transition-transform duration-300 hover:scale-110 w-full h-[200px] object-cover" alt="Banner" />
                   </Link>
                 </SwiperSlide>
               ))}

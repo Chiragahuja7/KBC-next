@@ -1,5 +1,8 @@
 import connectDB from "@/src/lib/mongodb";
 import Order from "@/src/models/Order";
+import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminOrdersPage({ searchParams }){
     const page = Math.max(1, parseInt(searchParams?.page) || 1);
@@ -44,8 +47,18 @@ export default async function AdminOrdersPage({ searchParams }){
                                         {order.items && order.items.length ? (
                                             <ul className="list-disc pl-5">
                                                 {order.items.map((it, idx) => (
-                                                    <li key={idx} className="text-sm">
-                                                        {it.name} ×{it.qty}
+                                                    <li key={idx} className="text-sm mb-1">
+                                                        <a 
+                                                            href={`https://kunjbiharicollection.in/shop/${it.slug}`} 
+                                                            target="_blank" 
+                                                            className="text-blue-600 hover:underline font-medium"
+                                                        >
+                                                            {it.name}
+                                                        </a>
+                                                        <span className="text-gray-500 ml-1">
+                                                            ({it.size || 'N/A'}{it.color ? `, ${it.color}` : ''})
+                                                        </span>
+                                                        <span className="font-bold ml-1">×{it.qty}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -67,13 +80,19 @@ export default async function AdminOrdersPage({ searchParams }){
                             Showing {(skip + 1)} - {Math.min(skip + orders.length, total)} of {total} orders
                         </div>
                         <div className="space-x-3">
-                            <a className={`px-3 py-1 bg-gray-100 rounded ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`} href={`?page=${page - 1}`}>
+                            <Link 
+                                className={`px-3 py-1 bg-gray-100 rounded ${page <= 1 ? 'opacity-50 pointer-events-none' : ''}`} 
+                                href={`?page=${page - 1}`}
+                            >
                                 Previous
-                            </a>
+                            </Link>
                             <span>Page {page} of {totalPages}</span>
-                            <a className={`px-3 py-1 bg-gray-100 rounded ${page >= totalPages ? 'opacity-50 pointer-events-none' : ''}`} href={`?page=${page + 1}`}>
+                            <Link 
+                                className={`px-3 py-1 bg-gray-100 rounded ${page >= totalPages ? 'opacity-50 pointer-events-none' : ''}`} 
+                                href={`?page=${page + 1}`}
+                            >
                                 Next
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

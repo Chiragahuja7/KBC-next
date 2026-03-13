@@ -65,8 +65,6 @@ export default function Header(){
                 <ul className="flex items-center gap-8 mt-4 ms-5">
                     <Link className="hover:text-orange-600 hover:underline" href="/">Home</Link>
                     <Link className="hover:text-orange-600 hover:underline" href="/shop">Shop</Link>
-                    <Link className="hover:text-orange-600 hover:underline" href="/shop/jeevan-amrit-complete-health-trio">💪HEALTH KITS💪</Link>
-                    <Link className="hover:text-orange-600 hover:underline" href="/shop/migraine-kit">Migraine Kit</Link>
                     <Link className="hover:text-orange-600 hover:underline" href="/contactus">Contact Us</Link>
                 </ul>
             </nav>
@@ -76,8 +74,6 @@ export default function Header(){
                     <ul className="flex flex-col p-4 gap-4">
                         <Link onClick={() => setIsMobileMenuOpen(false)} href="/">Home</Link>
                         <Link onClick={() => setIsMobileMenuOpen(false)} href="/shop">Shop</Link>
-                        <Link onClick={() => setIsMobileMenuOpen(false)} href="/shop/jeevan-amrit-complete-health-trio">💪HEALTH KITS💪</Link>
-                        <Link onClick={() => setIsMobileMenuOpen(false)} href="/shop/migraine-kit">Migraine Kit</Link>
                         <Link onClick={() => setIsMobileMenuOpen(false)} href="/contactus">Contact Us</Link>
                     </ul>
                 </div>

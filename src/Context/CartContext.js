@@ -31,25 +31,49 @@ export const CartProvider = ({ children }) => {
     }
   }, [cartItems]);
 
-  const addToCart = (product, selectedSize, quantity) => {
+  // Helper to build a cart-ready item from product + size object
+  const buildCartItem = (product, selectedSize, qty, color) => {
+    const isObj = typeof selectedSize === 'object' && selectedSize !== null;
+    const sizeLabel = isObj ? selectedSize.label : (selectedSize || '');
+    const itemPrice = (isObj && selectedSize.price) ? selectedSize.price : product.price;
+    const itemOldPrice = (isObj && selectedSize.oldPrice != null) ? selectedSize.oldPrice : product.oldPrice;
+    const cartImage = (isObj && selectedSize.image?.url) ? selectedSize.image.url : (product.images?.[0]?.url || '');
+
+    return {
+      ...product,
+      selectedSize: sizeLabel,
+      selectedColor: color,
+      quantity: qty,
+      price: itemPrice,
+      oldPrice: itemOldPrice,
+      cartImage,
+    };
+  };
+
+  const addToCart = (product, selectedSize, quantity, selectedColor) => {
     const qty = quantity ?? 1;
+    const isObj = typeof selectedSize === 'object' && selectedSize !== null;
+    const sizeLabel = isObj ? selectedSize.label : (selectedSize || '');
+    const color = selectedColor || '';
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) =>
           item._id === product._id &&
-          item.selectedSize === selectedSize
+          item.selectedSize === sizeLabel &&
+          (item.selectedColor || '') === color
       );
 
       if (existingItem) {
         return prevItems.map((item) =>
           item._id === product._id &&
-            item.selectedSize === selectedSize
+            item.selectedSize === sizeLabel &&
+            (item.selectedColor || '') === color
             ? { ...item, quantity: (item.quantity ?? 0) + qty }
             : item
         );
       }
 
-      return [...prevItems, { ...product, selectedSize, quantity: qty }];
+      return [...prevItems, buildCartItem(product, selectedSize, qty, color)];
     });
   };
 
@@ -87,9 +111,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const directBuy = (product, selectedSize, quantity) => {
+  const directBuy = (product, selectedSize, quantity, selectedColor) => {
     const qty = quantity ?? 1;
-    setCartItems([{ ...product, selectedSize, quantity: qty }]);
+    const color = selectedColor || '';
+    setCartItems([buildCartItem(product, selectedSize, qty, color)]);
   }
 
   const clearCart = () => {

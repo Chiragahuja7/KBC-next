@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { useCart } from "../../Context/CartContext";
+import { useState } from "react";
+import CheckoutModal from "../../components/CheckoutModal";
 
 export default function CartPage() {
     const { cartItems, increaseQty, decreaseQty, removeFromCart } = useCart();
 
     const items = cartItems || [];
+
+    const [showCheckout, setShowCheckout] = useState(false);
 
     function changeQty(item, delta) {
         if (delta > 0) increaseQty(item._id, item.selectedSize);
@@ -48,14 +52,15 @@ export default function CartPage() {
                             const id = item._id || item.id;
                             const price = item.price ?? 0;
                             const qty = item.quantity ?? item.qty ?? 1;
-                            const img = item.images?.[0]?.url ?? item.img ?? '/assets/placeholder.png';
+                            const img = item.cartImage || item.images?.[0]?.url || item.img || '/assets/placeholder.png';
                             return (
                                 <div key={id + (item.selectedSize || '')} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start md:items-center py-6 border-b border-b-gray-300">
                                     <div className="md:col-span-6 flex items-start md:items-center gap-4">
                                         <img src={img} alt={item.name} className="w-24 h-24 object-cover rounded" />
                                         <div>
                                             <h3 className="font-semibold">{item.name}</h3>
-                                            {item.selectedSize && <p className="text-sm text-gray-500 mt-1">{item.selectedSize}</p>}
+                                            {item.selectedSize && <p className="text-sm text-gray-500 mt-1">{typeof item.selectedSize === 'object' ? item.selectedSize.label : item.selectedSize}</p>}
+                                            {item.selectedColor && <p className="text-sm text-gray-500 mt-1">Color: {item.selectedColor}</p>}
                                             {item.pack && <p className="text-sm text-gray-500 mt-1">{item.pack}</p>}
                                             <div className="flex items-center gap-3 mt-2 text-gray-400">
                                                 <button onClick={() => removeFromCart(id, item.selectedSize)} className="text-sm text-red-600">Remove</button>
@@ -143,10 +148,11 @@ export default function CartPage() {
                             <button className="bg-gray-800 text-white px-4 py-3 rounded-full">Apply</button>
                         </div>
 
-                        <button className="w-full mt-6 bg-gray-800 text-white py-3 rounded-full">Check Out</button>
+                        <button onClick={() => setShowCheckout(true)} className="w-full mt-6 bg-gray-800 text-white py-3 rounded-full">Check Out</button>
                     </div>
                 </aside>
             </div>
+            {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
         </>
     );
 }
