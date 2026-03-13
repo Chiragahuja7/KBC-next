@@ -38,6 +38,12 @@ export async function GET(req) {
 
   const query = {};
 
+  const slugs = searchParams.get("slugs");
+  if (slugs) {
+    const slugList = slugs.split(",").filter(Boolean);
+    query.slug = { $in: slugList };
+  }
+
   // Hide unlisted products from storefront; admin sees all
   const admin = searchParams.get("admin");
   if (admin !== "true") {

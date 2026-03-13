@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useCart } from "../../Context/CartContext";
 import { useState } from "react";
 import CheckoutModal from "../../components/CheckoutModal";
+import ProductModal from "../../components/ProductsModal";
+import { useEffect } from "react";
 
 export default function CartPage() {
     const { cartItems, increaseQty, decreaseQty, removeFromCart } = useCart();
@@ -11,6 +13,22 @@ export default function CartPage() {
     const items = cartItems || [];
 
     const [showCheckout, setShowCheckout] = useState(false);
+    const [suggestions, setSuggestions] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            try {
+                // Fetch bestsellers or popular products as suggestions
+                const res = await fetch("/api/products?limit=4&bestseller=true");
+                const data = await res.json();
+                setSuggestions(data.products || []);
+            } catch (err) {
+                console.error("Error fetching suggestions:", err);
+            }
+        };
+        fetchSuggestions();
+    }, []);
 
     function changeQty(item, delta) {
         if (delta > 0) increaseQty(item._id, item.selectedSize);
@@ -88,28 +106,36 @@ export default function CartPage() {
                         })}
                     </div>
 
-                    <div className="mt-8 md:block hidden">
-                        <h2 className="text-xl font-semibold mb-4">You may also like...</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="flex gap-4 items-center border rounded-lg p-4">
-                                <img src="https://refineveda.com/cdn/shop/files/complete_wellness_kit-Photoroom.jpg?v=1763637235&width=720" alt="suggestion" className="w-24 h-24 object-cover rounded" />
-                                <div>
-                                    <h3 className="font-medium">Sarva Arogya - Complete Wellness Kit</h3>
-                                    <p className="text-primary font-bold mt-1">Rs. 999.00 <span className="line-through text-gray-400 ml-2">Rs. 2,197.00</span></p>
-                                    <button className="mt-3 underline text-sm text-gray-800">Add to Cart</button>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4 items-center border rounded-lg p-4">
-                                <img src="https://refineveda.com/cdn/shop/files/migrainekit-Photoroom_2.jpg?v=1761904777&width=720" alt="suggestion2" className="w-24 h-24 object-cover rounded" />
-                                <div>
-                                    <h3 className="font-medium">Migraine Kit - Best For Headache Relief</h3>
-                                    <p className="text-primary font-bold mt-1">Rs. 799.00 <span className="line-through text-gray-400 ml-2">Rs. 999.00</span></p>
-                                    <button className="mt-3 underline text-sm text-gray-800">Add to Cart</button>
-                                </div>
+                    {suggestions.length > 0 && (
+                        <div className="mt-8 md:block hidden">
+                            <h2 className="text-xl font-semibold mb-4">You may also like...</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                {suggestions.map((item) => {
+                                    const img = item.images?.[0]?.url || '/assets/placeholder.png';
+                                    return (
+                                        <div key={item._id} className="flex gap-4 items-center border rounded-lg p-4 bg-white hover:shadow-md transition">
+                                            <Link href={`/shop/${item.slug}`} className="shrink-0">
+                                                <img src={img} alt={item.name} className="w-24 h-24 object-cover rounded" />
+                                            </Link>
+                                            <div className="flex-1">
+                                                <h3 className="font-medium text-sm line-clamp-1">{item.name}</h3>
+                                                <p className="text-primary font-bold mt-1">
+                                                    Rs. {item.price}.00 
+                                                    {item.oldPrice && <span className="line-through text-gray-400 text-xs ml-2">Rs. {item.oldPrice}.00</span>}
+                                                </p>
+                                                <button 
+                                                    onClick={() => setSelectedProduct(item)}
+                                                    className="mt-3 underline text-sm text-gray-800 font-semibold"
+                                                >
+                                                    Add to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 <aside className="w-full lg:w-96">
@@ -160,6 +186,7 @@ export default function CartPage() {
                 </aside>
             </div>
             {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
+            {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
         </>
     );
 }

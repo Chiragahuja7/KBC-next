@@ -28,6 +28,18 @@ export default function Page() {
   const [showCheckout, setShowCheckout] = useState(false);
 
 
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [recentProducts, setRecentProducts] = useState([]);
+
+  // Track Recently Viewed
+  useEffect(() => {
+    if (product?.slug) {
+      const recent = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+      const updated = [product.slug, ...recent.filter(s => s !== product.slug)].slice(0, 10);
+      localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+    }
+  }, [product]);
+
   useEffect(() => {
     if (!slug) return;
     const fetchData = async () => {
@@ -36,18 +48,37 @@ export default function Page() {
         const res = await fetch(`/api/products/${slug}`);
         if (!res.ok) throw new Error('Failed to fetch product');
         const data = await res.json();
-        setProduct(data.product);
+        const currentProduct = data.product;
+        setProduct(currentProduct);
 
-        if (data.product.sizes?.length > 0) {
-          const firstSize = data.product.sizes[0];
+        if (currentProduct.sizes?.length > 0) {
+          const firstSize = currentProduct.sizes[0];
           setSelectedSize(typeof firstSize === 'string' ? firstSize : firstSize);
         }
-        if (data.product.colors?.length > 0) {
-          setSelectedColor(data.product.colors[0]);
+        if (currentProduct.colors?.length > 0) {
+          setSelectedColor(currentProduct.colors[0]);
         }
 
-        const firstImg = data.product?.images && data.product.images[0] ? data.product.images[0].url : null;
+        const firstImg = currentProduct?.images && currentProduct.images[0] ? currentProduct.images[0].url : null;
         setDisplayImage(firstImg);
+
+        // Fetch Related Products (People Also Bought)
+        if (currentProduct.category) {
+          const relRes = await fetch(`/api/products?category=${encodeURIComponent(currentProduct.category)}&limit=5`);
+          const relData = await relRes.json();
+          setRelatedProducts((relData.products || []).filter(p => p.slug !== slug));
+        }
+
+        // Fetch Recently Viewed Products
+        const recentSlugs = JSON.parse(localStorage.getItem("recentlyViewed") || "[]")
+          .filter(s => s !== slug)
+          .slice(0, 4);
+        
+        if (recentSlugs.length > 0) {
+          const recRes = await fetch(`/api/products?slugs=${recentSlugs.join(",")}`);
+          const recData = await recRes.json();
+          setRecentProducts(recData.products || []);
+        }
 
       } catch (err) {
         setError(err.message || 'Error fetching product');
@@ -349,141 +380,125 @@ export default function Page() {
         </Marquee>
       </div>
 
-      <div className="text-black text-center mt-10">
-        <h1 className="text-4xl font-bold">People Also Bought</h1>
-        <p className="p-4 text-gray-600">
-          Here's some of our most similar products people are buying. Click to discover trending style.
-        </p>
-      </div>
+      {relatedProducts.length > 0 && (
+        <>
+          <div className="text-black text-center mt-10">
+            <h1 className="text-4xl font-bold">People Also Bought</h1>
+            <p className="p-4 text-gray-600">
+              Here's some of our most similar products people are buying. Click to discover trending style.
+            </p>
+          </div>
 
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((item) => {
+                const primaryImg = item?.images?.[0]?.url || '/assets/placeholder.png';
+                const hoverImg = item?.images?.[1]?.url || primaryImg;
+                return (
+                  <div key={item._id} className="bg-white rounded-2xl p-4 transition hover:shadow-lg border border-gray-100">
+                    <Link href={`/shop/${item.slug}`} className="block relative md:overflow-hidden rounded-xl group">
+                      {item.discount && (
+                        <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full z-10">
+                          {item.discount}
+                        </span>
+                      )}
+                      <Image
+                        src={primaryImg}
+                        width={400}
+                        height={400}
+                        alt={item.name}
+                        className="w-full h-65 object-cover rounded-xl transition-opacity duration-300 group-hover:opacity-0"
+                      />
+                      <Image
+                        src={hoverImg}
+                        width={400}
+                        height={400}
+                        alt="Hover"
+                        className="w-full h-65 object-cover rounded-xl absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                    </Link>
 
-          {products.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl p-4 transition">
-              <Link href="" className="block relative md:overflow-hidden rounded-xl group">
+                    <h3 className="text-black font-semibold mt-4 text-center text-lg">{item.name}</h3>
+                    <div className="text-center mt-2">
+                      <span className="text-primary font-bold text-lg">Rs. {item.price}.00</span>
+                      {item.oldPrice && (
+                        <span className="text-gray-400 line-through ms-2">Rs. {item.oldPrice}.00</span>
+                      )}
+                    </div>
 
-                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full z-10">
-                  {item.discount}
-                </span>
-
-                <Image
-                  src={item.img}
-                  width={400}
-                  height={400}
-                  alt={item.name}
-                  className="w-full h-65 object-cover rounded-xl transition-opacity duration-300 group-hover:opacity-0"
-                />
-
-                <Image
-                  src={item.hoverImg}
-                  width={400}
-                  height={400}
-                  alt="Hover"
-                  className="w-full h-65 object-cover rounded-xl absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-              </Link>
-
-              <h3 className="text-black font-semibold mt-4 text-center text-lg">
-                {item.name}
-              </h3>
-
-              <div className="text-center mt-2">
-                <span className="text-primary font-bold text-lg">
-                  Rs. {item.price}.00
-                </span>
-                <span className="text-gray-400 line-through ms-2">
-                  Rs. {item.oldPrice}.00
-                </span>
-              </div>
-
-              <button
-                onClick={() => setSelectedProduct(item)}
-                className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
-              >
-                Add to Cart
-              </button>
+                    <button
+                      onClick={() => setSelectedProduct(item)}
+                      className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          </div>
+        </>
+      )}
 
-        {selectedProduct && (
-          <ProductModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
-        )}
-      </div>
+      {recentProducts.length > 0 && (
+        <>
+          <div className="text-black text-center mt-10 pt-10">
+            <h1 className="text-4xl font-bold">Recently Viewed</h1>
+            <p className="p-4 text-gray-600">
+              Explore your recently viewed items, blending quality and style for a refined living experience.
+            </p>
+          </div>
 
-      <div className="text-black text-center mt-10 pt-10">
-        <h1 className="text-4xl font-bold">Recently Viewed</h1>
-        <p className="p-4 text-gray-600">
-          Explore your recently viewed items, blending quality and style for a refined living experience.
-        </p>
-      </div>
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {recentProducts.map((item) => {
+                const primaryImg = item?.images?.[0]?.url || '/assets/placeholder.png';
+                const hoverImg = item?.images?.[1]?.url || primaryImg;
+                return (
+                  <div key={item._id} className="bg-white rounded-2xl p-4 transition hover:shadow-lg border border-gray-100">
+                    <Link href={`/shop/${item.slug}`} className="block relative md:overflow-hidden rounded-xl group">
+                      {item.discount && (
+                        <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full z-10">
+                          {item.discount}
+                        </span>
+                      )}
+                      <Image
+                        src={primaryImg}
+                        width={400}
+                        height={400}
+                        alt={item.name}
+                        className="w-full h-65 object-cover rounded-xl transition-opacity duration-300 group-hover:opacity-0"
+                      />
+                      <Image
+                        src={hoverImg}
+                        width={400}
+                        height={400}
+                        alt="Hover"
+                        className="w-full h-65 object-cover rounded-xl absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                    </Link>
 
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                    <h3 className="text-black font-semibold mt-4 text-center text-lg">{item.name}</h3>
+                    <div className="text-center mt-2">
+                      <span className="text-primary font-bold text-lg">Rs. {item.price}.00</span>
+                      {item.oldPrice && (
+                        <span className="text-gray-400 line-through ms-2">Rs. {item.oldPrice}.00</span>
+                      )}
+                    </div>
 
-          {products.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl p-4 transition">
-              <Link href="" className="block relative md:overflow-hidden rounded-xl group">
-
-                <span className="absolute top-3 left-3 bg-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full z-10">
-                  {item.discount}
-                </span>
-
-                <Image
-                  src={item.img}
-                  width={400}
-                  height={400}
-                  alt={item.name}
-                  className="w-full h-65 object-cover rounded-xl transition-opacity duration-300 group-hover:opacity-0"
-                />
-
-                <Image
-                  src={item.hoverImg}
-                  width={400}
-                  height={400}
-                  alt="Hover"
-                  className="w-full h-65 object-cover rounded-xl absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-              </Link>
-
-              <h3 className="text-black font-semibold mt-4 text-center text-lg">
-                {item.name}
-              </h3>
-
-              <div className="text-center mt-2">
-                <span className="text-primary font-bold text-lg">
-                  Rs. {item.price}.00
-                </span>
-                <span className="text-gray-400 line-through ms-2">
-                  Rs. {item.oldPrice}.00
-                </span>
-              </div>
-
-              <button
-                onClick={() => setSelectedProduct(item)}
-                className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
-              >
-                Add to Cart
-              </button>
+                    <button
+                      onClick={() => setSelectedProduct(item)}
+                      className="mt-5 border-2 border-gray-300 text-primary font-semibold w-full py-3 rounded-full hover:bg-primary hover:text-white transition"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
-
-        {selectedProduct && (
-          <ProductModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
-        )}
-      </div>
+          </div>
+        </>
+      )}
       {isLightboxOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={closeLightbox}>
           <button onClick={closeLightbox} className="absolute top-4 right-4 text-white bg-black/40 rounded-full p-2">✕</button>

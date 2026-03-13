@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-4">About Us</h3>
           <p className="text-sm text-gray-200 leading-6 mb-4">
-            Kunj Bihari Collection brings you a curated selection of premium products, 
+            Kunj Bihari Collections brings you a curated selection of premium products, 
             blending traditional craftsmanship with modern quality standards.
           </p>
           <p className="text-sm text-gray-200 leading-6 mb-4">
