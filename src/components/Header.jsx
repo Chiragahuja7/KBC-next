@@ -14,8 +14,8 @@ export default function Header(){
     const { cartItems } = useCart();
 
     return(
-        <header className="p-4 relative" style={{ backgroundColor: 'var(--primary)' }}>
-            <div className="flex justify-between items-center ms-5 mb-4">
+        <header className="p-4 pt-1 relative" style={{ backgroundColor: 'var(--primary)' }}>
+            <div className="flex justify-between items-center">
 
                 <div className="md:hidden">
                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -23,7 +23,7 @@ export default function Header(){
                     </button>
                 </div>
                 <Link href="/">
-                    <Image src="/assets/refineveda_logo.webp" height={100} width={100} alt="logo" />
+                    <Image src="/assets/kbc_logo.webp" height={100} width={100} alt="logo" />
                 </Link>
 
                 <div className="w-170 h-10 bg-white rounded-full hidden gap-1 md:flex items-center px-2">

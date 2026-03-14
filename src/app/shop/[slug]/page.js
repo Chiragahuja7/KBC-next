@@ -218,7 +218,7 @@ export default function Page() {
 
           </div>
           <div className="text-black font-bold md:overflow-auto overflow-visible h-auto md:h-130 no-scrollbar">
-            <span className="text-gray-700">Refineveda</span>
+            <span className="text-gray-700">Kunj Bihari Collections</span>
             <h1 className="text-3xl">{product.name}</h1>
             <div className="flex">
               <p className="text-primary text-2xl mt-3">

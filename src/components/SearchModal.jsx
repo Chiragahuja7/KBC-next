@@ -57,7 +57,7 @@ export default function SearchModal({ isOpen, onClose, searchQuery }) {
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`absolute top-16 left-0 w-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${show ? "translate-y-0" : "-translate-y-full"
+        className={`absolute top-20 left-0 w-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${show ? "translate-y-0" : "-translate-y-full"
           }`}
       >
         <div className="p-4">
