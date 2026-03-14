@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# sensitive admin files
+/src/app/api/registeradmin/route.js
+/register.js
