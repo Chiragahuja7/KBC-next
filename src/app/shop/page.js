@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProductModal from "@/src/components/ProductsModal";
+import { Suspense } from "react";
 
-export default function Shop() {
+function ShopContent() {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -337,4 +338,12 @@ export default function Shop() {
             </div>
         </>
     )
+}
+
+export default function Shop() {
+    return (
+        <Suspense fallback={<div className="p-20 text-center">Loading shop...</div>}>
+            <ShopContent />
+        </Suspense>
+    );
 }
