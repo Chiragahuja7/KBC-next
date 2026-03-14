@@ -2,7 +2,6 @@
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { products } from "@/data/products"
 import Link from "next/link";
 import Image from "next/image";
 import ProductModal from "@/src/components/ProductsModal";
@@ -359,19 +358,19 @@ export default function Page() {
         <Marquee className="text-white bg-primary" speed={150} pauseOnHover={true} >
           <div className="my-3 flex gap-20 font-bold">
             <p>
-              😍Shop for ₹499+ GET 1 FREE GIFT!🎁
+              🦚Radhe Radhe🦚
             </p>
             <svg width="12" height="12" fill="none" className="mt-1.5">
               <path fill="currentColor" d="M0 6c3 0 6-3 6-6 0 3 3 6 6 6-3 0-6 3-6 6 0-3-3-6-6-6Z"></path>
             </svg>
             <p>
-              💸USE CODE "EXTRA10" TO GET EXTRA 10% OFF💸
+              💸Safe and Fast Shipping💸
             </p>
             <svg width="12" height="12" fill="none" className="mt-1.5">
               <path fill="currentColor" d="M0 6c3 0 6-3 6-6 0 3 3 6 6 6-3 0-6 3-6 6 0-3-3-6-6-6Z"></path>
             </svg>
             <p>
-              😍Shop for ₹999+ GET 2 FREE GIFTS!🎁🎁
+              😍Shop for ₹1499+ GET Extra Off🎁🎁
             </p>
             <svg width="12" height="12" fill="none" className="mt-1.5">
               <path fill="currentColor" d="M0 6c3 0 6-3 6-6 0 3 3 6 6 6-3 0-6 3-6 6 0-3-3-6-6-6Z"></path>

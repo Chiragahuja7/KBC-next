@@ -1,5 +1,4 @@
 'use client';
-import { testimonials } from "@/data/products"
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
