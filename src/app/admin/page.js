@@ -10,7 +10,9 @@ const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
 
-export default function Admin() {
+import { Suspense } from "react";
+
+function AdminContent() {
 
   const emptyForm = {
     name: "",
@@ -451,5 +453,13 @@ export default function Admin() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function Admin() {
+  return (
+    <Suspense fallback={<div className="p-10">Loading...</div>}>
+      <AdminContent />
+    </Suspense>
   );
 }
