@@ -69,11 +69,30 @@ export default function Admin() {
     setLoading(false);
   }
 
+  function slugify(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
+  }
+
   function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    if (name === "name" && !editingId) {
+      setForm({
+        ...form,
+        name: value,
+        slug: slugify(value),
+      });
+    } else {
+      setForm({
+        ...form,
+        [name]: value,
+      });
+    }
   }
 
   async function uploadFiles(files) {
@@ -237,20 +256,10 @@ export default function Admin() {
             <input name="name" value={form.name} onChange={handleChange} required className="w-full border rounded-lg px-3 py-2 mt-1" />
           </div>
 
-          <div>
+          {/* <div>
             <label className="font-medium">Slug</label>
             <input name="slug" value={form.slug} onChange={handleChange} required className="w-full border rounded-lg px-3 py-2 mt-1" />
-          </div>
-
-          <div>
-            <label className="font-medium">Base Price</label>
-            <input name="price" value={form.price} onChange={handleChange} type="number" required className="w-full border rounded-lg px-3 py-2 mt-1" />
-          </div>
-
-          <div>
-            <label className="font-medium">Base Old Price</label>
-            <input name="oldPrice" value={form.oldPrice} onChange={handleChange} type="number" className="w-full border rounded-lg px-3 py-2 mt-1" />
-          </div>
+          </div> */}
 
           <div>
             <label className="font-medium">Category</label>
@@ -268,6 +277,17 @@ export default function Admin() {
               isMulti
             />
           </div>
+
+          <div>
+            <label className="font-medium">Price</label>
+            <input name="price" value={form.price} onChange={handleChange} type="number" required className="w-full border rounded-lg px-3 py-2 mt-1" />
+          </div>
+
+          <div>
+            <label className="font-medium">Old Price</label>
+            <input name="oldPrice" value={form.oldPrice} onChange={handleChange} type="number" className="w-full border rounded-lg px-3 py-2 mt-1" />
+          </div>
+
 
           <div>
             <label className="font-medium">Images</label>

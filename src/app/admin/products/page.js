@@ -8,17 +8,22 @@ import toast from "react-hot-toast";
 export default function AllProducts() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [total, setTotal] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        fetchProducts(page);
+    }, [page]);
 
-    async function fetchProducts() {
+    async function fetchProducts(pageNum) {
         setLoading(true);
-        const res = await fetch("/api/products?admin=true");
+        const res = await fetch(`/api/products?admin=true&page=${pageNum}&limit=10`);
         const data = await res.json();
         setProducts(Array.isArray(data.products) ? data.products : []);
+        setTotalPages(data.pages || 1);
+        setTotal(data.total || 0);
         setLoading(false);
     }
 
@@ -44,7 +49,7 @@ export default function AllProducts() {
             const data = await res.json();
             if (data.success) {
                 toast.success("Product deleted successfully");
-                fetchProducts();
+                fetchProducts(page);
             } else {
                 toast.error("Failed to delete: " + (data.error || ""));
             }
@@ -72,6 +77,7 @@ export default function AllProducts() {
                 ) : products.length === 0 ? (
                     <p className="text-gray-500">No products yet.</p>
                 ) : (
+                <>
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
                             <tr>
@@ -125,6 +131,31 @@ export default function AllProducts() {
                             ))}
                         </tbody>
                     </table>
+                    
+                    {/* Pagination Controls */}
+                    <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-700">
+                        <div className="text-center sm:text-left">
+                            Showing {total === 0 ? 0 : (page - 1) * 10 + 1} - {Math.min(page * 10, total)} of {total} products
+                        </div>
+                        <div className="flex items-center space-x-3">
+                            <button 
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                disabled={page <= 1}
+                                className={`px-3 py-1 bg-gray-100 rounded ${page <= 1 ? 'opacity-50 pointer-events-none' : 'hover:bg-gray-200'}`} 
+                            >
+                                Previous
+                            </button>
+                            <span>Page {page} of {totalPages}</span>
+                            <button 
+                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                disabled={page >= totalPages}
+                                className={`px-3 py-1 bg-gray-100 rounded ${page >= totalPages ? 'opacity-50 pointer-events-none' : 'hover:bg-gray-200'}`} 
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </>
                 )}
             </div>
         </div>

@@ -3,6 +3,37 @@ import Product from "@/src/models/Product";
 import cloudinary from "@/src/lib/cloudinary";
 import { NextResponse } from "next/server";
 
+function slugify(text) {
+  if (!text) return "";
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
+
+async function generateUniqueSlug(baseSlug, Model, ignoreId = null) {
+  let slug = slugify(baseSlug) || "product";
+  let isUnique = false;
+  let counter = 1;
+  let currentSlug = slug;
+
+  while (!isUnique) {
+    const query = { slug: currentSlug };
+    if (ignoreId) query._id = { $ne: ignoreId };
+    
+    const existing = await Model.findOne(query).select("_id").lean();
+    if (!existing) {
+      isUnique = true;
+    } else {
+      currentSlug = `${slug}-${counter}`;
+      counter++;
+    }
+  }
+  return currentSlug;
+}
+
 export async function POST(req) {
   try {
     await connectDB();
@@ -12,6 +43,8 @@ export async function POST(req) {
 
     if (body.price !== undefined) body.price = Number(body.price);
     if (body.oldPrice !== undefined) body.oldPrice = Number(body.oldPrice);
+
+    body.slug = await generateUniqueSlug(body.slug || body.name, Product);
 
     const product = await Product.create(body);
 
@@ -123,20 +156,27 @@ export async function PUT(req) {
 
     const body = await req.json();
     console.log("/api/products PUT body:", body);
-    const { id, slug, ...update } = body;
+    const { id, ...update } = body;
 
-    if (!id && !slug) {
-      return NextResponse.json({ success: false, error: "Provide id or slug to update" });
+    let existingProduct;
+    if (id) {
+      existingProduct = await Product.findById(id);
+    } else if (body.slug) {
+      existingProduct = await Product.findOne({ slug: body.slug });
     }
-    let product;
+    
+    if (!existingProduct) {
+      return NextResponse.json({ success: false, error: id || body.slug ? "Product not found" : "Provide id or slug to update" });
+    }
+
     if (update.price !== undefined) update.price = Number(update.price);
     if (update.oldPrice !== undefined) update.oldPrice = Number(update.oldPrice);
 
-    if (id) {
-      product = await Product.findByIdAndUpdate(id, update, { new: true });
-    } else {
-      product = await Product.findOneAndUpdate({ slug }, update, { new: true });
+    if (update.slug !== undefined) {
+      update.slug = await generateUniqueSlug(update.slug || update.name || existingProduct.name, Product, existingProduct._id);
     }
+
+    const product = await Product.findByIdAndUpdate(existingProduct._id, update, { new: true });
     return NextResponse.json({ success: true, product });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message });
