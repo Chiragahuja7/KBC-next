@@ -21,7 +21,7 @@ export default function PrivacyPage() {
         <p>We may update this privacy policy from time to time in order to reflect, for example, changes to our practices or for other operational, legal or regulatory reasons.</p>
         
         <h2 className="text-2xl font-semibold text-black mt-8">6. Contact Us</h2>
-        <p>For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at info@kunjbiharicollections.in.</p>
+        <p>For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at Sunaina.1997dcmi@gmail.com.</p>
       </div>
     </div>
   );

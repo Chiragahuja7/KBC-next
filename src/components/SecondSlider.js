@@ -18,7 +18,7 @@ export default function SecondSlider(){
     <div className="p-4 md:block hidden">
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3 p-8">
         {[
-          { name: "Cotton Dress", img: "cotton_dress.webp" },
+          { name: "Jhula", img: "jhula.webp" },
           { name: "Dress", img: "dress.webp" },
           { name: "Jewellery", img: "jewellwey.webp" }, // Keeping original typo in filename
           { name: "Mukut", img: "mukut.webp" },
@@ -48,7 +48,7 @@ export default function SecondSlider(){
       <div className="gap-1">
         <Swiper pagination={{clickable: true, el:".custom-dots"}} freeMode={true} spaceBetween={10} slidesPerView={3} modules={[Pagination ,FreeMode]} className="mySwiper">
         {[
-          { name: "Cotton Dress", img: "cotton_dress.webp" },
+          { name: "Jhula", img: "jhula.webp" },
           { name: "Dress", img: "dress.webp" },
           { name: "Jewellery", img: "jewellwey.webp" },
           { name: "Mukut", img: "mukut.webp" },

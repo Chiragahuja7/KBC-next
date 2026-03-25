@@ -58,12 +58,12 @@ export default function ContactUs(){
                 <p className="text-gray-500 pt-2 pb-2">Have a question? Please contact us using the customer support channels below.</p>
                 <span className="font-bold">Customer Care:</span>
                 <p className="text-gray-500 underline pt-2 pb-1"><a href="tel:+91-6284850078">+91-6284850078</a></p>
-                <p className="text-gray-500 underline pb-1">Email: <a href="mailto:info@kunjbiharicollections.in">info@kunjbiharicollections.in</a></p>
+                <p className="text-gray-500 underline pb-1">Email: <a href="mailto:Sunaina.1997dcmi@gmail.com">Sunaina.1997dcmi@gmail.com</a></p>
                 <p className="text-gray-500 pb-1">Opening hours: Mon-Sun 9:00am - 8:00pm</p>
                 <span className="font-bold pb-1">Bulk Order:</span>
-                <p className="text-gray-500 underline pb-1 pt-1">Email: <a href="mailto:info@kunjbiharicollections.in">info@kunjbiharicollections.in</a></p>
+                <p className="text-gray-500 underline pb-1 pt-1">Email: <a href="mailto:Sunaina.1997dcmi@gmail.com">Sunaina.1997dcmi@gmail.com</a></p>
                 <span className="font-bold pb-1">Contact for Franchise:</span>
-                <p className="text-gray-500 underline pb-1 pt-1">Email: <a href="mailto:info@kunjbiharicollections.in">info@kunjbiharicollections.in</a></p>
+                <p className="text-gray-500 underline pb-1 pt-1">Email: <a href="mailto:Sunaina.1997dcmi@gmail.com">Sunaina.1997dcmi@gmail.com</a></p>
             </div>
             <div className="mt-6 sm:mt-0">
                 <span className="font-bold text-2xl">Contact Us</span>

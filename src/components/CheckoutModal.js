@@ -50,7 +50,7 @@ export default function CheckoutModal({ onClose }) {
       message += `*Total Amount: Rs.${total}*`;
 
       // 4. Redirect to WhatsApp
-      const whatsappUrl = `https://wa.me/919821005871?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/917627027559?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
 
     } catch (err) {

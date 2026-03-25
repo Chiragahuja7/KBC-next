@@ -21,7 +21,7 @@ export default function TermsPage() {
         <p>These Terms of Service and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India.</p>
         
         <h2 className="text-2xl font-semibold text-black mt-8">6. Contact Information</h2>
-        <p>Questions about the Terms of Service should be sent to us at info@kunjbiharicollections.in.</p>
+        <p>Questions about the Terms of Service should be sent to us at Sunaina.1997dcmi@gmail.com.</p>
       </div>
     </div>
   );

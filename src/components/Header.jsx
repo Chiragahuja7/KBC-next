@@ -22,7 +22,7 @@ export default function Header(){
                         <i className="fa-solid fa-bars text-2xl text-white"></i>
                     </button>
                 </div>
-                <Link href="/">
+                <Link href="/" className="ms-9 md:ms-0">
                     <Image src="/assets/kbc_logo.webp" height={100} width={100} alt="logo" />
                 </Link>
 

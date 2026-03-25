@@ -19,7 +19,7 @@ export default function ReturnsPage() {
         <p>Certain types of items cannot be returned, like perishable goods, custom products (such as special orders or personalized items), and personal care goods.</p>
         
         <h2 className="text-2xl font-semibold text-black mt-8">5. Contact Us</h2>
-        <p>If you have any questions on how to return your item to us, contact us at info@kunjbiharicollections.in.</p>
+        <p>If you have any questions on how to return your item to us, contact us at Sunaina.1997dcmi@gmail.com.</p>
         <p>Note:Accepting or rejecting a return is in the hands of website owner.</p>
       </div>
     </div>
