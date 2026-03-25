@@ -1,7 +1,9 @@
 'use client'
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 import CartModal from "./CartModal";
 import { useCart } from "../Context/CartContext";
 import SearchModal from "./SearchModal";
@@ -12,6 +14,15 @@ export default function Header(){
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchText, setSearchText] = useState("");
     const { cartItems } = useCart();
+    const [cartAnimated, setCartAnimated] = useState(false);
+
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            setCartAnimated(true);
+            const timer = setTimeout(() => setCartAnimated(false), 300);
+            return () => clearTimeout(timer);
+        }
+    }, [cartItems.length]);
 
     return(
         <header className="p-4 pt-1 relative" style={{ backgroundColor: 'var(--primary)' }}>
@@ -50,14 +61,23 @@ export default function Header(){
                         <i className="fa-solid fa-magnifying-glass text-xl"></i>
                     </button>
 
-                    <button 
+                    <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => setIsCartOpen(true)} 
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-colors"
                     >
-                        <i className="fa-solid fa-cart-shopping"></i>
+                        <motion.i 
+                            animate={cartAnimated ? { scale: [1, 1.3, 1], rotate: [0, -10, 10, 0] } : {}}
+                            className="fa-solid fa-cart-shopping"
+                        ></motion.i>
                         <span className="hidden md:inline">Cart</span>
-                        <p>({cartItems.length})</p>
-                    </button>
+                        <motion.p
+                            key={cartItems.length}
+                            initial={{ scale: 1.5, color: "#ff8a00" }}
+                            animate={{ scale: 1, color: "#ffffff" }}
+                        >({cartItems.length})</motion.p>
+                    </motion.button>
                 </div>
             </div>
 
@@ -79,12 +99,14 @@ export default function Header(){
                 </div>
             )}
 
-            {isCartOpen && (
-                <CartModal 
-                    cartItems={cartItems} 
-                    onClose={() => setIsCartOpen(false)} 
-                />
-            )}
+            <AnimatePresence>
+                {isCartOpen && (
+                    <CartModal 
+                        cartItems={cartItems} 
+                        onClose={() => setIsCartOpen(false)} 
+                    />
+                )}
+            </AnimatePresence>
 
             <SearchModal
                 isOpen={isSearchOpen}

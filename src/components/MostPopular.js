@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
@@ -39,7 +41,15 @@ export default function MostPopular() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-3">
 
                         {products.slice(0, 3).map((item) => (
-                            <div key={item._id} className="min-w-full sm:min-w-[60%] md:min-w-0 bg-white rounded-2xl p-3">
+                            <motion.div 
+                                key={item._id} 
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5 }}
+                                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                                className="min-w-full sm:min-w-[60%] md:min-w-0 bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-shadow duration-300"
+                            >
 
                                 <Link href={`/shop/${item.slug}`} className="block overflow-hidden rounded-xl group relative">
                                     {/* <span className="absolute top-3 left-3 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
@@ -58,15 +68,17 @@ export default function MostPopular() {
                                     className="mt-4 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition">
                                     Add to Cart
                                 </button>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
-                    {selectedProduct && (
-                        <ProductModal
-                            product={selectedProduct}
-                            onClose={() => setSelectedProduct(null)}
-                        />
-                    )}
+                    <AnimatePresence>
+                        {selectedProduct && (
+                            <ProductModal
+                                product={selectedProduct}
+                                onClose={() => setSelectedProduct(null)}
+                            />
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
         </>

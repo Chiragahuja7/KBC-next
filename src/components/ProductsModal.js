@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -101,15 +103,22 @@ export default function ProductModal({ product, onClose }) {
   }
 
   return (
-    <div
-      className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center backdrop-blur-sm px-4"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose && onClose();
       }}
     >
 
-      <div
-        className="bg-white w-full max-w-5xl rounded-3xl grid grid-cols-1 md:grid-cols-2 relative mx-4 md:mx-0 overflow-y-auto md:overflow-hidden max-h-[90vh] md:max-h-none"
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="bg-white w-full max-w-5xl rounded-3xl grid grid-cols-1 md:grid-cols-2 relative overflow-y-auto md:overflow-hidden max-h-[90vh] md:max-h-none shadow-2xl"
         onMouseDown={(e) => e.stopPropagation()}
       >
 
@@ -230,13 +239,15 @@ export default function ProductModal({ product, onClose }) {
             </Link>
           </div>
         </div>
-      </div>
-      {isCartOpen && (
-        <CartModal cartItems={cartItems} onClose={() => setIsCartOpen(false)} />
-      )}
-      {showCheckout && (
-        <CheckoutModal onClose={() => setShowCheckout(false)} />
-      )}
-    </div>
+      </motion.div>
+      <AnimatePresence>
+        {isCartOpen && (
+          <CartModal cartItems={cartItems} onClose={() => setIsCartOpen(false)} />
+        )}
+        {showCheckout && (
+          <CheckoutModal onClose={() => setShowCheckout(false)} />
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { useCart } from "../Context/CartContext";
 
 export default function CheckoutModal({ onClose }) {
@@ -97,8 +98,21 @@ export default function CheckoutModal({ onClose }) {
   };
 
   return (
-    <div onClick={onClose} className="fixed inset-0 z-50 flex justify-end items-end md:items-center text-black bg-black/50">
-      <div onClick={(e) => e.stopPropagation()} className="bg-white p-4 w-full flex flex-col md:w-120 h-full relative transform transition-transform duration-500 ease-in-out">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose} 
+      className="fixed inset-0 z-50 flex justify-end items-end md:items-center text-black bg-black/60 backdrop-blur-sm px-4"
+    >
+      <motion.div 
+        initial={{ x: "100%", opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: "100%", opacity: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        onClick={(e) => e.stopPropagation()} 
+        className="bg-white p-6 w-full flex flex-col md:w-120 h-full relative shadow-2xl overflow-y-auto"
+      >
         <button onClick={onClose} className="absolute right-4 top-4 text-xl">✕</button>
         <h2 className="text-2xl font-bold mb-4">Checkout</h2>
 
@@ -155,7 +169,7 @@ export default function CheckoutModal({ onClose }) {
           </div>
           <button type="submit" disabled={loading || cartItems.length === 0} className="bg-[#444444] text-white w-full px-4 py-3 rounded-full">{loading ? 'Processing...' : 'Place Order on WhatsApp'}</button>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
