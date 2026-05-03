@@ -28,8 +28,8 @@ export default function MostPopular() {
 
     return (
         <>
-            <div className="p-6">
-                <div className="p-4 flex justify-between items-center">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+                <div className="flex justify-between items-center mb-6">
                     <span className="text-black text-3xl md:text-5xl font-bold">Most Popular</span>
                     <div className="flex items-center gap-4">
                         <span className="font-semibold hidden md:inline" style={{ color: 'var(--primary)' }}>Most Popular</span>
@@ -37,8 +37,8 @@ export default function MostPopular() {
                     </div>
                 </div>
 
-                <div className="p-4 w-auto">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-3">
+                <div className="w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
                         {products.slice(0, 3).map((item) => (
                             <motion.div
@@ -48,24 +48,21 @@ export default function MostPopular() {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5 }}
                                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                                className="min-w-full sm:min-w-[60%] md:min-w-0 bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-shadow duration-300"
+                                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-shadow duration-300"
                             >
 
                                 <Link href={`/shop/${item.slug}`} className="block overflow-hidden rounded-xl group relative">
-                                    {/* <span className="absolute top-3 left-3 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
-                        {item.discount}
-                    </span> */}
-                                    <Image src={item.images[0].url} height={100} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover md:h-100 h-70" />
-                                    <Image src={item.images[1]?.url || item.images[0].url} height={100} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" />
+                                    <Image src={item.images?.[0]?.url || "/assets/default-product-image.jpg"} height={80} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-100" />
+                                    <Image src={item.images?.[1]?.url || item.images?.[0]?.url} height={80} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" />
                                 </Link>
-                                <h3 className="text-black font-semibold mt-3 text-center">{item.name}</h3>
-                                <div className="text-center mt-1">
-                                    <span className="font-bold" style={{ color: 'var(--primary)' }}>Rs. {item.price}.00</span>
-                                    <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>
+                                <h3 className="text-black font-semibold mt-4 text-center text-lg">{item.name}</h3>
+                                <div className="text-center mt-2">
+                                    <span className="font-bold text-lg" style={{ color: 'var(--primary)' }}>Rs. {item.price}.00</span>
+                                    {item.oldPrice && <span className="text-gray-400 line-through ms-2"> Rs. {item.oldPrice}.00</span>}
                                 </div>
 
                                 <button onClick={() => setSelectedProduct(item)}
-                                    className="mt-4 border text-primary font-bold hover:text-white border-gray-300 w-full py-2 rounded-full hover:bg-primary transition">
+                                    className="mt-5 border text-primary font-bold hover:text-white border-gray-300 w-full py-3 rounded-full hover:bg-primary transition">
                                     Add to Cart
                                 </button>
                             </motion.div>

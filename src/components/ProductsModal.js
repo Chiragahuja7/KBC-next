@@ -231,8 +231,8 @@ export default function ProductModal({ product, onClose }) {
           </div>
 
           <div className="pt-3 border-t border-gray-100 mt-auto">
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="flex items-center border border-gray-200 bg-gray-50 rounded-full h-12 px-4 text-black font-bold justify-between min-w-[120px] w-full sm:w-auto">
+            <div className="flex flex-row items-center gap-3">
+              <div className="flex items-center border border-gray-200 bg-gray-50 rounded-full h-12 px-4 text-black font-bold justify-between w-32 sm:w-36 shrink-0">
                 <button onClick={decreaseQty} className="w-6 text-lg hover:text-red-500 transition">−</button>
                 <span className="text-center min-w-[30px] select-none">{qty}</span>
                 <button onClick={increaseQty} className="w-6 text-lg hover:text-green-500 transition">+</button>
@@ -240,7 +240,7 @@ export default function ProductModal({ product, onClose }) {
 
               <button
                 onClick={handleAddToCart}
-                className="bg-black text-white w-full h-12 rounded-full font-bold hover:bg-gray-800 transition shadow-lg shadow-black/10 flex items-center justify-center text-sm px-6"
+                className="bg-black text-white flex-1 h-12 rounded-full font-bold hover:bg-gray-800 transition shadow-lg shadow-black/10 flex items-center justify-center text-sm px-6"
               >
                 Add to Cart
               </button>

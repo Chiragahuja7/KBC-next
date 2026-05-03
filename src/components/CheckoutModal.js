@@ -103,7 +103,7 @@ export default function CheckoutModal({ onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose} 
-      className="fixed inset-0 z-50 flex justify-end items-end md:items-center text-black bg-black/60 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-50 flex justify-end items-end md:items-center text-black bg-black/60 backdrop-blur-sm"
     >
       <motion.div 
         initial={{ x: "100%", opacity: 0 }}
@@ -118,13 +118,13 @@ export default function CheckoutModal({ onClose }) {
 
         <div className="mb-4">
           <p className="font-semibold">Items ({cartItems.length})</p>
-          <ul className="mt-2 max-h-25 overflow-auto">
+          <ul className="mt-2 max-h-32 overflow-auto">
             {cartItems.map((item, i) => (
               <li key={i} className="flex justify-between py-1 border-b-gray-200 border-b">
                 <img
                   src={item.cartImage || item.images?.[0]?.url}
                   alt={item.name}
-                  className="w-15 h-12 object-cover rounded"
+                  className="w-16 h-12 object-cover rounded"
                 />
                 <div>
                   <p className="font-medium">{item.name}</p>
