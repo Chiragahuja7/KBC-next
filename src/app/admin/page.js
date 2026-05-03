@@ -34,6 +34,8 @@ function AdminContent() {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [uploadingSizes, setUploadingSizes] = useState([]);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [colorInput, setColorInput] = useState("");
   const searchParams = useSearchParams();
@@ -108,51 +110,57 @@ function AdminContent() {
   async function handleFiles(e) {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
-    setLoading(true);
+    setIsUploadingImages(true);
     const uploads = await uploadFiles(files);
-    setForm({ ...form, images: [...form.images, ...uploads] });
-    setLoading(false);
+    setForm((prevForm) => ({ ...prevForm, images: [...prevForm.images, ...uploads] }));
+    setIsUploadingImages(false);
   }
 
   function removeImage(index) {
-    setForm({ ...form, images: form.images.filter((_, i) => i !== index) });
+    setForm((prevForm) => ({ ...prevForm, images: prevForm.images.filter((_, i) => i !== index) }));
   }
 
   // --- Size variant helpers ---
   function addSize() {
-    setForm({
-      ...form,
-      sizes: [...form.sizes, { label: "", price: "", oldPrice: "", image: null }],
-    });
+    setForm((prevForm) => ({
+      ...prevForm,
+      sizes: [...prevForm.sizes, { label: "", price: "", oldPrice: "", image: null }],
+    }));
   }
 
   function removeSize(index) {
-    setForm({ ...form, sizes: form.sizes.filter((_, i) => i !== index) });
+    setForm((prevForm) => ({ ...prevForm, sizes: prevForm.sizes.filter((_, i) => i !== index) }));
   }
 
   function handleSizeFieldChange(index, field, value) {
-    const updated = [...form.sizes];
-    updated[index] = { ...updated[index], [field]: value };
-    setForm({ ...form, sizes: updated });
+    setForm((prevForm) => {
+      const updated = [...prevForm.sizes];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prevForm, sizes: updated };
+    });
   }
 
   async function handleSizeImage(index, e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLoading(true);
+    setUploadingSizes((prev) => [...prev, index]);
     const uploads = await uploadFiles([file]);
     if (uploads.length > 0) {
-      const updated = [...form.sizes];
-      updated[index] = { ...updated[index], image: uploads[0] };
-      setForm({ ...form, sizes: updated });
+      setForm((prevForm) => {
+        const updated = [...prevForm.sizes];
+        updated[index] = { ...updated[index], image: uploads[0] };
+        return { ...prevForm, sizes: updated };
+      });
     }
-    setLoading(false);
+    setUploadingSizes((prev) => prev.filter((i) => i !== index));
   }
 
   function removeSizeImage(index) {
-    const updated = [...form.sizes];
-    updated[index] = { ...updated[index], image: null };
-    setForm({ ...form, sizes: updated });
+    setForm((prevForm) => {
+      const updated = [...prevForm.sizes];
+      updated[index] = { ...updated[index], image: null };
+      return { ...prevForm, sizes: updated };
+    });
   }
 
   // --- Color helpers ---
@@ -308,6 +316,15 @@ function AdminContent() {
                   <button type="button" onClick={() => removeImage(idx)} className="absolute right-0 top-0 bg-white rounded-full px-2">✕</button>
                 </div>
               ))}
+              {isUploadingImages && (
+                <div className="w-24 h-24 rounded border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-xs text-gray-500 bg-gray-50 animate-pulse">
+                  <svg className="animate-spin h-5 w-5 text-gray-400 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  Uploading...
+                </div>
+              )}
             </div>
           </div>
 
@@ -406,6 +423,16 @@ function AdminContent() {
                       <div className="flex items-center gap-3 mt-1">
                         <img src={sz.image.url} className="w-16 h-16 object-cover rounded" />
                         <button type="button" onClick={() => removeSizeImage(idx)} className="text-red-500 text-sm">Remove image</button>
+                      </div>
+                    ) : uploadingSizes.includes(idx) ? (
+                      <div className="flex items-center gap-3 mt-1">
+                        <div className="w-16 h-16 rounded border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-xs text-gray-500 bg-gray-50 animate-pulse">
+                          <svg className="animate-spin h-4 w-4 text-gray-400 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500">Uploading variant image...</span>
                       </div>
                     ) : (
                       <input
