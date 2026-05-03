@@ -123,8 +123,8 @@ export default function ProductModal({ product, onClose }) {
       >
 
         {/* Improved Close Button for Mobile and Desktop */}
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="absolute right-4 top-4 z-10 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full shadow-md text-xl text-black md:bg-transparent md:shadow-none hover:bg-gray-100 transition"
         >
           ✕
@@ -139,11 +139,11 @@ export default function ProductModal({ product, onClose }) {
             {gallery.map((img, i) => (
               <SwiperSlide key={i}>
                 <div className="relative w-full h-80 md:h-[600px] flex items-center justify-center bg-gray-50">
-                  <Image 
-                    src={img} 
-                    fill 
-                    alt="product" 
-                    className="object-contain md:object-cover" 
+                  <Image
+                    src={img}
+                    fill
+                    alt="product"
+                    className="object-contain md:object-cover"
                     priority={i === 0}
                   />
                 </div>
@@ -217,22 +217,22 @@ export default function ProductModal({ product, onClose }) {
               <button onClick={increaseQty} className="w-6 text-xl">+</button>
             </div>
 
-            <button 
-              onClick={handleAddToCart} 
+            <button
+              onClick={handleAddToCart}
               className="bg-black text-white w-full h-14 rounded-full font-bold hover:bg-gray-800 transition shadow-lg shadow-black/10"
             >
               Add to Cart
             </button>
           </div>
 
-          <button 
-            onClick={handleBuyNow} 
+          <button
+            onClick={handleBuyNow}
             className="w-full h-14 rounded-full mt-3 font-bold transition-all shadow-lg shadow-primary/20"
             style={{ backgroundColor: 'var(--primary)', color: 'white' }}
           >
             Buy it now
           </button>
-          
+
           <div className="mt-6 text-center">
             <Link href={`/shop/${product.slug}`} className="text-sm font-bold text-black hover:underline inline-flex items-center gap-1">
               View Full Details <i className="fa-solid fa-arrow-right text-[10px]"></i>

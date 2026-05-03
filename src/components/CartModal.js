@@ -134,7 +134,7 @@ export default function CartModal({ cartItems, onClose }) {
               <div className="bg-gray-50 p-6 border-t border-gray-200">
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-gray-600 font-medium">SubTotal:</span>
-                  <span className="text-2xl font-bold text-black">Rs.{total}</span>
+                  <span className="text-2xl font-bold text-black">Rs.{total} + shipping</span>
                 </div>
                 <div className="space-y-3">
                   <button onClick={handleCartPage} className="w-full py-4 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all">View Cart</button>

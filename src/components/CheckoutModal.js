@@ -48,7 +48,7 @@ export default function CheckoutModal({ onClose }) {
         message += `Link: ${itemLink}\n\n`;
       });
 
-      message += `*Total Amount: Rs.${total}*`;
+      message += `*Total Amount: Rs.${total} + shipping*`;
 
       // 4. Redirect to WhatsApp
       const whatsappUrl = `https://wa.me/917627027559?text=${encodeURIComponent(message)}`;
@@ -138,7 +138,7 @@ export default function CheckoutModal({ onClose }) {
 
         <div className="flex justify-between items-center font-bold text-lg mb-4">
           <span>Subtotal</span>
-          <span>Rs.{total}</span>
+          <span>Rs.{total} + shipping</span>
         </div>
         <form
           onSubmit={async (e) => {

@@ -72,7 +72,7 @@ export default function Page() {
         const recentSlugs = JSON.parse(localStorage.getItem("recentlyViewed") || "[]")
           .filter(s => s !== slug)
           .slice(0, 4);
-        
+
         if (recentSlugs.length > 0) {
           const recRes = await fetch(`/api/products?slugs=${recentSlugs.join(",")}`);
           const recData = await recRes.json();

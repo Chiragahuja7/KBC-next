@@ -8,11 +8,11 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-4">About Us</h3>
           <p className="text-sm text-gray-200 leading-6 mb-4">
-            Kunj Bihari Collections brings you a curated selection of premium products, 
+            Kunj Bihari Collections brings you a curated selection of premium products,
             blending traditional craftsmanship with modern quality standards.
           </p>
           <p className="text-sm text-gray-200 leading-6 mb-4">
-            Our mission is to provide our customers with unique and high-quality 
+            Our mission is to provide our customers with unique and high-quality
             collections that enhance their lifestyle.
           </p>
           <p className="text-sm text-gray-200 leading-6 mb-4">
@@ -22,8 +22,8 @@ export default function Footer() {
             <a href="tel:+917627027559" className="text-sm flex items-center gap-2 hover:text-orange-400 transition">
               <i className="fa-solid fa-phone"></i> +91-7627027559
             </a>
-            <a href="mailto:Sunaina.1997dcmi@gmail.com" className="text-sm flex items-center gap-2 hover:text-orange-400 transition">
-              <i className="fa-solid fa-envelope"></i> Sunaina.1997dcmi@gmail.com
+            <a href="mailto:kunjbiharicollections20@gmail.com" className="text-sm flex items-center gap-2 hover:text-orange-400 transition">
+              <i className="fa-solid fa-envelope"></i> kunjbiharicollections20@gmail.com
             </a>
           </div>
           <div className="flex gap-3 mt-5">
@@ -36,9 +36,9 @@ export default function Footer() {
             >
               <i className="fab fa-facebook-f text-sm"></i>
             </a> */}
-            <a 
-              href="https://www.instagram.com/kunj_bihari_collections" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/kunj_bihari_collections"
+              target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 flex items-center justify-center border border-white rounded-full cursor-pointer hover:bg-white hover:text-pink-600 transition"
               aria-label="Instagram"
@@ -64,9 +64,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-200 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-center md:text-left">
             © KunjBihariCollections 2026 . Developed with ❤️ by
-            <a 
-              href="https://www.linkedin.com/in/chirag-ahuja-6906a121b/" 
-              target="_blank" 
+            <a
+              href="https://www.linkedin.com/in/chirag-ahuja-6906a121b/"
+              target="_blank"
               rel="noopener noreferrer"
               className="underline cursor-pointer hover:text-orange-400 transition"
             > Chirag Ahuja</a>

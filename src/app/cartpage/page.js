@@ -171,15 +171,15 @@ export default function CartPage() {
                         <div className="border-t border-b py-4 my-4">
                             <div className="flex justify-between items-center">
                                 <span className="font-semibold">Subtotal:</span>
-                                <span className="font-semibold">Rs. {total.toLocaleString()}</span>
+                                <span className="font-semibold">Rs. {total.toLocaleString()} + shipping</span>
                             </div>
                             <p className="text-sm text-gray-500 mt-2">Tax included. Shipping and discounts calculated at checkout.</p>
                         </div>
 
-                        <div className="flex gap-3 items-center">
+                        {/* <div className="flex gap-3 items-center">
                             <input placeholder="Discount Code" className="flex-1 px-4 py-3 rounded-full border" />
                             <button className="bg-gray-800 text-white px-4 py-3 rounded-full">Apply</button>
-                        </div>
+                        </div> */}
 
                         <button onClick={() => setShowCheckout(true)} className="w-full mt-6 bg-gray-800 text-white py-3 rounded-full">Check Out</button>
                     </div>

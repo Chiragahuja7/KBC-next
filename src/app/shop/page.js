@@ -248,9 +248,9 @@ function ShopContent() {
                                     const imgHeight = gridCols === 4 ? 'h-48' : gridCols === 1 ? 'h-48' : 'h-52 md:h-72';
                                     return (
                                         <div key={item._id} className="bg-white rounded-2xl p-3 group/card hover:shadow-lg transition-shadow duration-300">
-                                            
+
                                             <Link href={`/shop/${item.slug}`} className="block overflow-hidden rounded-xl group relative">
-                                                <Image 
+                                                <Image
                                                     src={primaryImg}
                                                     height={300}
                                                     width={400}
