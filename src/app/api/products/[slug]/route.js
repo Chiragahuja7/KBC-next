@@ -1,6 +1,7 @@
 import connectDB from "@/src/lib/mongodb";
 import Product from "@/src/models/Product";
 import { NextResponse } from "next/server";
+import { optimizeProduct } from "@/src/lib/optimizeImage";
 
 export async function GET(req, context) {
   try {
@@ -9,16 +10,18 @@ export async function GET(req, context) {
     const params = await context.params;
     const slug = params.slug;
 
-    const product = await Product.findOne({
+    const productRaw = await Product.findOne({
       slug: slug
     }).lean();
 
-    if (!product) {
+    if (!productRaw) {
       return NextResponse.json(
         { success: false, error: "Product not found" },
         { status: 404 }
       );
     }
+
+    const product = optimizeProduct(productRaw);
 
     return NextResponse.json({ success: true, product });
   } catch (error) {

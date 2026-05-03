@@ -2,6 +2,7 @@ import connectDB from "@/src/lib/mongodb";
 import Product from "@/src/models/Product";
 import cloudinary from "@/src/lib/cloudinary";
 import { NextResponse } from "next/server";
+import { optimizeProduct } from "@/src/lib/optimizeImage";
 
 function slugify(text) {
   if (!text) return "";
@@ -136,10 +137,12 @@ export async function GET(req) {
     }
   }
 
-  const [products, total] = await Promise.all([
+  const [productsRaw, total] = await Promise.all([
     Product.find(query).sort(sortObj).skip(skip).limit(limit),
     Product.countDocuments(query),
   ]);
+
+  const products = productsRaw.map((p) => optimizeProduct(p));
 
   return NextResponse.json({
     success: true,

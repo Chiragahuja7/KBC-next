@@ -40,7 +40,7 @@ export default function MostPopular() {
                 <div className="w-full">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-                        {products.slice(0, 3).map((item) => (
+                        {products.slice(0, 3).map((item, idx) => (
                             <motion.div
                                 key={item._id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -52,8 +52,8 @@ export default function MostPopular() {
                             >
 
                                 <Link href={`/shop/${item.slug}`} className="block overflow-hidden rounded-xl group relative">
-                                    <Image src={item.images?.[0]?.url || "/assets/default-product-image.jpg"} height={80} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-100" />
-                                    <Image src={item.images?.[1]?.url || item.images?.[0]?.url} height={80} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" />
+                                    <Image src={item.images?.[0]?.url || "/assets/default-product-image.jpg"} height={80} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-100" priority={idx === 0} />
+                                    <Image src={item.images?.[1]?.url || item.images?.[0]?.url} height={80} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" priority={idx === 0} />
                                 </Link>
                                 <h3 className="text-black font-semibold mt-4 text-center text-lg">{item.name}</h3>
                                 <div className="text-center mt-2">

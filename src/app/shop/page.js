@@ -242,7 +242,7 @@ function ShopContent() {
                         <>
                             {/* Product Grid */}
                             <div className={`grid gap-4 transition-all duration-300 ${gridCols === 1 ? 'grid-cols-1 max-w-2xl mx-auto' : gridCols === 2 ? 'grid-cols-2' : gridCols === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 md:grid-cols-3'}`}>
-                                {products.map((item) => {
+                                {products.map((item, idx) => {
                                     const primaryImg = item?.images?.[0]?.url || '/assets/placeholder.png';
                                     const hoverImg = item?.images?.[1]?.url || primaryImg;
                                     const imgHeight = gridCols === 4 ? 'h-48' : gridCols === 1 ? 'h-48' : 'h-52 md:h-72';
@@ -256,6 +256,7 @@ function ShopContent() {
                                                     width={400}
                                                     alt={item.name}
                                                     className={`rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear w-full object-cover ${imgHeight}`}
+                                                    priority={idx === 0}
                                                 />
 
                                                 <Image
@@ -264,6 +265,7 @@ function ShopContent() {
                                                     width={400}
                                                     alt="Hover"
                                                     className={`rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear w-full object-cover ${imgHeight}`}
+                                                    priority={idx === 0}
                                                 />
                                             </Link>
 

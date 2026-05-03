@@ -41,7 +41,7 @@ export default function BestSeller() {
 
                     <div className="p-4 md:block hidden w-auto">
                         <div className="flex gap-3 p-3">
-                            {products.map((item) => (
+                            {products.map((item, idx) => (
                                 <motion.div
                                     key={item._id}
                                     initial={{ opacity: 0, y: 20 }}
@@ -57,8 +57,8 @@ export default function BestSeller() {
                                             {/* <span className="absolute top-3 left-3 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
                                                 {item.discount}
                                             </span> */}
-                                            <Image src={item.images[0]?.url || "/assets/default-product-image.jpg"} height={80} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-100" />
-                                            <Image src={item.images[1]?.url || item.images[0]?.url} height={80} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" />
+                                            <Image src={item.images[0]?.url || "/assets/default-product-image.jpg"} height={80} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-100" priority={idx === 0} />
+                                            <Image src={item.images[1]?.url || item.images[0]?.url} height={80} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-100" priority={idx === 0} />
                                         </div>
                                         <h3 className="text-black font-semibold mt-3 text-center">{item.name}</h3>
                                         <div className="text-center mt-1">
@@ -79,7 +79,7 @@ export default function BestSeller() {
                         <div className="gap-3">
                             <Swiper pagination={{ clickable: true, el: ".custom-pagination" }} modules={[Pagination]} className="mySwiper pb-10">
 
-                                {products.map((item) => (
+                                {products.map((item, idx) => (
                                     <SwiperSlide key={item.id}>
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
@@ -93,8 +93,8 @@ export default function BestSeller() {
                                                     {/* <span className="absolute top-3 left-3 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
                                                         {item.discount}
                                                     </span> */}
-                                                    <Image src={item.images[0]?.url || "/assets/default-product-image.jpg"} height={100} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-70" />
-                                                    <Image src={item.images[1]?.url || item.images[0]?.url} height={100} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-70" />
+                                                    <Image src={item.images[0]?.url || "/assets/default-product-image.jpg"} height={100} width={600} alt={item.name} className="rounded-xl transition-opacity duration-300 group-hover:opacity-0 ease-linear object-cover h-70" priority={idx === 0} />
+                                                    <Image src={item.images[1]?.url || item.images[0]?.url} height={100} width={600} alt="Hover" className="rounded-xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-linear object-cover h-70" priority={idx === 0} />
                                                 </div>
                                                 <h3 className="text-black font-semibold mt-3 text-center">{item.name}</h3>
                                                 <div className="text-center mt-1">
