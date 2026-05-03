@@ -176,38 +176,42 @@ export default function Page() {
                 </button>
               ))}
             </div>
-            <div className="w-full max-w-md lg:max-w-lg aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+            <div className="w-full max-w-md lg:max-w-lg aspect-square bg-white rounded-lg overflow-hidden flex items-center justify-center relative">
               {displayImage ? (
                 <>
                   <img
                     src={displayImage}
                     alt={product.name}
-                    className="w-full max-w-md lg:max-w-lg rounded-lg object-cover cursor-zoom-in"
+                    className="w-full h-full object-cover rounded-lg scale-110 transition-transform duration-300 cursor-zoom-in"
                     onClick={() => { setIsLightboxOpen(true); document.body.style.overflow = 'hidden'; }}
                   />
-                  <button
-                    aria-label="previous image"
-                    onClick={() => {
-                      if (uniqueGallery.length === 0) return;
-                      const next = (currentIndex - 1 + uniqueGallery.length) % uniqueGallery.length;
-                      setCurrentIndex(next);
-                      setDisplayImage(uniqueGallery[next]);
-                    }}
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full p-4 shadow-md"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    aria-label="next image"
-                    onClick={() => {
-                      if (uniqueGallery.length === 0) return;
-                      const next = (currentIndex + 1) % uniqueGallery.length;
-                      setCurrentIndex(next);
-                      setDisplayImage(uniqueGallery[next]);
-                    }}
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full p-4 shadow-md">
-                    ›
-                  </button>
+                  {uniqueGallery.length > 1 && (
+                    <>
+                      <button
+                        aria-label="previous image"
+                        onClick={() => {
+                          if (uniqueGallery.length === 0) return;
+                          const next = (currentIndex - 1 + uniqueGallery.length) % uniqueGallery.length;
+                          setCurrentIndex(next);
+                          setDisplayImage(uniqueGallery[next]);
+                        }}
+                        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full p-4 shadow-md"
+                      >
+                        ‹
+                      </button>
+                      <button
+                        aria-label="next image"
+                        onClick={() => {
+                          if (uniqueGallery.length === 0) return;
+                          const next = (currentIndex + 1) % uniqueGallery.length;
+                          setCurrentIndex(next);
+                          setDisplayImage(uniqueGallery[next]);
+                        }}
+                        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full p-4 shadow-md">
+                        ›
+                      </button>
+                    </>
+                  )}
                 </>
               ) : (
                 <div className="w-full h-full flex items-center justify-center">No image</div>

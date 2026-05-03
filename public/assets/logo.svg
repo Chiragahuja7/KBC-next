@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Premium Golden Gradient -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="50%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <!-- Deep Professional Blue Gradient -->
+    <linearGradient id="blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#212e58" />
+      <stop offset="100%" stop-color="#141d3b" />
+    </linearGradient>
+  </defs>
+  <!-- Background Circle with deep professional blue -->
+  <circle cx="256" cy="256" r="240" fill="url(#blue)" stroke="url(#gold)" stroke-width="12" />
+  <!-- Inner ring for sophistication -->
+  <circle cx="256" cy="256" r="218" fill="none" stroke="url(#gold)" stroke-width="2" stroke-dasharray="8,8" opacity="0.6" />
+  <!-- Stylized Elegant 'K' made of paths -->
+  <path d="M 160 120 L 220 120 L 220 392 L 160 392 Z M 220 270 L 325 120 L 400 120 L 265 295 L 405 392 L 330 392 L 220 240 Z" fill="url(#gold)" />
+</svg>

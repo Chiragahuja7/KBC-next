@@ -89,15 +89,79 @@ export default function Header(){
                 </ul>
             </nav>
 
-            {isMobileMenuOpen && (
-                <div className="md:hidden bg-white text-black absolute left-0 w-full shadow-lg z-50">
-                    <ul className="flex flex-col p-4 gap-4">
-                        <Link onClick={() => setIsMobileMenuOpen(false)} href="/">Home</Link>
-                        <Link onClick={() => setIsMobileMenuOpen(false)} href="/shop">Shop</Link>
-                        <Link onClick={() => setIsMobileMenuOpen(false)} href="/contactus">Contact Us</Link>
-                    </ul>
-                </div>
-            )}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0, x: "-100%" }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: "-100%" }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="fixed inset-0 bg-white text-stone-900 z-[100] md:hidden flex flex-col justify-start p-6 select-none overflow-y-auto"
+                    >
+                        {/* Top Section with Close Button */}
+                        <div className="flex justify-end w-full mb-8">
+                            <motion.button 
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="w-12 h-12 flex items-center justify-center bg-stone-100 rounded-full hover:bg-stone-200 transition-colors shadow-sm select-none"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-stone-800">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </motion.button>
+                        </div>
+
+                        {/* Centered navigation items and button directly underneath */}
+                        <div className="flex flex-col items-center justify-center flex-1 gap-12">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="w-full flex justify-center"
+                            >
+                                <Link 
+                                    onClick={() => setIsMobileMenuOpen(false)} 
+                                    href="/"
+                                    className="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 hover:text-stone-600 transition-colors duration-200"
+                                >
+                                    Home
+                                </Link>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.15 }}
+                                className="w-full flex justify-center"
+                            >
+                                <Link 
+                                    onClick={() => setIsMobileMenuOpen(false)} 
+                                    href="/shop"
+                                    className="text-4xl md:text-5xl font-bold tracking-tight text-stone-900 hover:text-stone-600 transition-colors duration-200"
+                                >
+                                    Shop
+                                </Link>
+                            </motion.div>
+
+                            <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="flex justify-center w-full px-4"
+                            >
+                                <Link 
+                                    onClick={() => setIsMobileMenuOpen(false)} 
+                                    href="/contactus"
+                                    className="w-full max-w-sm py-4 bg-stone-950 text-white text-center rounded-full text-base md:text-lg font-bold tracking-wider hover:bg-stone-800 transition-colors duration-200 shadow-md select-none mt-4"
+                                >
+                                    GET IN TOUCH
+                                </Link>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <AnimatePresence>
                 {isCartOpen && (

@@ -32,10 +32,10 @@ export default function BestSeller() {
             <div className="p-6">
                 <div className="bg-gray-100 rounded-2xl p-4">
                     <div className="p-4 flex justify-between items-center">
-                        <span className="text-black text-5xl font-bold">Best Sellers</span>
-                        <div className="flex gap-4">
-                            <span className="font-semibold" style={{ color: 'var(--primary)' }}>Best Selling</span>
-                            <Link className="text-gray-500" href="/shop">View All »</Link>
+                        <span className="text-black text-3xl md:text-5xl font-bold">Best Sellers</span>
+                        <div className="flex items-center gap-4">
+                            <span className="font-semibold hidden md:inline" style={{ color: 'var(--primary)' }}>Best Selling</span>
+                            <Link className="text-stone-500 font-medium whitespace-nowrap" href="/shop">View All »</Link>
                         </div>
                     </div>
 
